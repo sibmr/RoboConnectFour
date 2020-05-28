@@ -1,3 +1,6 @@
+import cv2 as cv
+import numpy as np
+
 class Perception(object):
     # for segmentation
     depth_background = None
@@ -22,13 +25,13 @@ class Perception(object):
         self.set_background(*sim.getImageAndDepth())
     
     def get_object_pixels(self,depth):
-        cond = (init_depth > depth)
+        cond = (self.depth_background > depth)
         imgray = (cond*255).astype(np.uint8)
         contours, hierarchy = cv.findContours(imgray,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
         cv.drawContours(bgr, contours, -1, (0,255,0), 3)
         return imgray
     
-    def get_unique_colors():
+    def get_unique_colors(self):
         return np.array(
             [
             [0,255,0]
@@ -81,7 +84,7 @@ class Perception(object):
         xyz = np.hstack((x,y,z))
         return xyz
     
-    def get_image_coordinates_auto(self, depth, bin_img):
+    def get_image_coordinates_auto(self, depth, bin_img, fxfypxpy, S):
         x, y = np.where(bin_img==255)
         z = depth[x,y]
         x = x.reshape((len(x),1))

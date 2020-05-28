@@ -1,4 +1,4 @@
-class Manipulation:
+class Manipulation(object):
     
     def __init__(self, tau, C, V, S, ry):
         self.C = C

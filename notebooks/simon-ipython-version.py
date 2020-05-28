@@ -90,64 +90,20 @@ for i in range(10):
 
 V.setConfiguration(C)
 
-# %%
-class RobotProgram1(object):
-    def __init__(self, robot):
-        self.robot = robot
-        self.RSTATE = 2
-    def step(self):
-        if self.RSTATE == 0:
-            pos = [0.2+0.8*np.sin(t/100),0,1]
-            finish = self.robot.move_gripper_to_pos("R_gripper", pos)
-            if finish:
-                self.RSTATE = 3
-        elif self.RSTATE == 1:
-            pos = [0.5, 0, 1.5]
-            finish = self.robot.move_gripper_to_pos("R_gripper", pos)
-            if finish:
-                self.RSTATE = 3
-        elif self.RSTATE == 2:
-            finish = self.robot.grasp("R_gripper", "object")
-            if finish:
-                self.RSTATE = 1
-        elif self.RSTATE == 3:
-            finish = self.robot.delayed_open_gripper(50)
-            if finish:
-                self.RSTATE = 2
-
-class RobotProgram2(object):
-    def __init__(self, robot):
-        self.robot = robot
-        self.RSTATE = 0
-        self.stick_count = 1
-        self.max_sticks = 10
-        self.height = 1
-    def step(self):
-        if self.RSTATE == 0:
-            finish = self.robot.grasp("R_gripper", "stick{}".format(self.stick_count))
-            if finish:
-                self.RSTATE = 1
-        if self.RSTATE == 1:
-            pos = [0.1, 0.1, self.height]
-            finish = self.robot.move_gripper_to_pos("R_gripper", pos)
-            if finish:
-                self.height += 0.1
-                self.stick_count += 1
-                self.RSTATE = 2
-        elif self.RSTATE == 2:
-            finish = self.robot.delayed_open_gripper(50)
-            if finish:
-                self.RSTATE = 0
-
-
 # In[7]
 
 sys.path.append('../')
 from robot import Robot
+from robot_state_machine import RobotProgram1, RobotProgram2
 
 robo = Robot(0.01, C, V, S, ry)
 #robo_program = RobotProgram1(robo)
-robo_program = RobotProgram2(robo)
+behavior_functions = []
+behavior_functions.append(lambda : robo.grasp("R_gripper", "stick{}".format(self.stick_count)))
+behavior_functions.append(lambda : robo.grasp("R_gripper", "stick{}".format(self.stick_count)))
+state_change_functions = []
+
+robo_program = RobotProgram2(robo, behavior_functions, state_change_functions)
 
 for t in range(10000):
     # do perception

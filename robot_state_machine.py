@@ -20,7 +20,7 @@ class RobotProgram1(RobotStateMachine):
     def __init__(self, robot):
         self.robot = robot
         self.r_state = 2
-    def step(self):
+    def step(self, t=0):
         if self.r_state == 0:
             pos = [0.2+0.8*np.sin(t/100),0,1]
             finish = self.robot.move_gripper_to_pos("R_gripper", pos)
@@ -41,13 +41,12 @@ class RobotProgram1(RobotStateMachine):
                 self.r_state = 2
 
 class RobotProgram2(RobotStateMachine):
-    def __init__(self, robot, state_behavior_functions, state_change_functions):
+    def __init__(self, robot):
         self.robot = robot
         self.RSTATE = 0
         self.stick_count = 1
         self.max_sticks = 10
         self.height = 1
-        self.state_behavior_functions = state_behavior_functions
     def step(self):
         if self.RSTATE == 0:
             finish = self.robot.grasp("R_gripper", "stick{}".format(self.stick_count))

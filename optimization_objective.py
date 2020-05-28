@@ -33,27 +33,27 @@ class OptimizationObjective(object):
         constraints gripping specified object with specified gripper
         """
         ry = self.ry
-        self.komo.addObjective([1.], ry.FS.positionDiff, [gripper+"Center",obj], ry.OT.sos, [1e3]);
-        #self.komo.addObjective([1.], ry.FS.positionDiff, [gripper, obj], ry.OT.sos, [1e2]);
-        self.komo.addObjective([1.], ry.FS.vectorZ, [gripper], ry.OT.sos, [1e2], target=[0,0,1]);
-        #self.komo.addObjective([1.], ry.FS.scalarProductXZ, [obj,gripper], ry.OT.sos, [1e2]);
-        self.komo.addObjective([1.], ry.FS.scalarProductXY, [obj,gripper], ry.OT.sos, [1e2]);
+        self.komo.addObjective([1.], ry.FS.positionDiff, [gripper+"Center",obj], ry.OT.sos, [1e3])
+        #self.komo.addObjective([1.], ry.FS.positionDiff, [gripper, obj], ry.OT.sos, [1e2])
+        self.komo.addObjective([1.], ry.FS.vectorZ, [gripper], ry.OT.sos, [1e2], target=[0,0,1])
+        #self.komo.addObjective([1.], ry.FS.scalarProductXZ, [obj,gripper], ry.OT.sos, [1e2])
+        self.komo.addObjective([1.], ry.FS.scalarProductXY, [obj,gripper], ry.OT.sos, [1e2])
         self.komo.addObjective([], ry.FS.accumulatedCollisions, [], ry.OT.ineq, [1e2])
-        self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [2e1], order=1);
-        #self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [3e1]);
+        self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [2e1], order=1)
+        #self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [3e1])
         self.komo.addObjective([], ry.FS.qItself, ["R_finger1"], ry.OT.eq, [1e1], order=1)
         self.komo.addObjective([], ry.FS.qItself, ["R_finger2"], ry.OT.eq, [1e1], order=1)
             
     def go_to_object(self, gripper, obj):
         ry = self.ry
         # TODO make go_to_object() more general than grasp()
-        self.komo.addObjective([1.], ry.FS.positionDiff, [gripper,obj], ry.OT.sos, [1e3]);
-        #self.komo.addObjective([1.], ry.FS.positionDiff, ["R_gripperCenter", "percept"], ry.OT.sos, [1e2]);
-        self.komo.addObjective([1.], ry.FS.vectorZ, [gripper], ry.OT.sos, [1e2], target=[0,0,1]);
-        self.komo.addObjective([1.], ry.FS.scalarProductXZ, [obj,gripper], ry.OT.sos, [1e2]);
-        self.komo.addObjective([1.], ry.FS.scalarProductXY, [obj,gripper], ry.OT.sos, [1e2]);
+        self.komo.addObjective([1.], ry.FS.positionDiff, [gripper,obj], ry.OT.sos, [1e3])
+        #self.komo.addObjective([1.], ry.FS.positionDiff, ["R_gripperCenter", "percept"], ry.OT.sos, [1e2])
+        self.komo.addObjective([1.], ry.FS.vectorZ, [gripper], ry.OT.sos, [1e2], target=[0,0,1])
+        self.komo.addObjective([1.], ry.FS.scalarProductXZ, [obj,gripper], ry.OT.sos, [1e2])
+        self.komo.addObjective([1.], ry.FS.scalarProductXY, [obj,gripper], ry.OT.sos, [1e2])
         self.komo.addObjective([], ry.FS.accumulatedCollisions, [], ry.OT.ineq, [1e2])
-        self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [1e3], order=1);
+        self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [1e3], order=1)
         self.komo.addObjective([], ry.FS.qItself, ["R_finger1"], ry.OT.eq, [1e1], order=1)
 
     def move_to_position(self, gripper, pos):
@@ -62,8 +62,8 @@ class OptimizationObjective(object):
         """
         ry = self.ry
         self.komo.addObjective([], ry.FS.accumulatedCollisions, [], ry.OT.ineq, [1e2])
-        self.komo.addObjective([1.], ry.FS.position, [gripper + "Center"], ry.OT.sos, [1e3], target=pos);
-        self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [2e1], order=1);
+        self.komo.addObjective([1.], ry.FS.position, [gripper + "Center"], ry.OT.sos, [1e3], target=pos)
+        self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [2e1], order=1)
         #self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [3e1]);
         self.komo.addObjective([], ry.FS.qItself, ["R_finger1"], ry.OT.eq, [1e1], order=1)
         self.komo.addObjective([], ry.FS.qItself, ["R_finger2"], ry.OT.eq, [1e1], order=1)

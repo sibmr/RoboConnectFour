@@ -98,12 +98,7 @@ from robot_state_machine import RobotProgram1, RobotProgram2
 
 robo = Robot(0.01, C, V, S, ry)
 #robo_program = RobotProgram1(robo)
-behavior_functions = []
-behavior_functions.append(lambda : robo.grasp("R_gripper", "stick{}".format(self.stick_count)))
-behavior_functions.append(lambda : robo.grasp("R_gripper", "stick{}".format(self.stick_count)))
-state_change_functions = []
-
-robo_program = RobotProgram2(robo, behavior_functions, state_change_functions)
+robo_program = RobotProgram2(robo)
 
 for t in range(10000):
     # do perception

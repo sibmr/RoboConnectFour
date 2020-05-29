@@ -15,8 +15,9 @@ print(cv.__version__)
 #Let's edit the real world before we create the simulation
 RealWorld = ry.Config()
 RealWorld.addFile("../../robotics-course/scenarios/challenge.g")
-#stl seems to be broke
-#RealWorld.addFile("../models/connect_4.g")
+#collisions are off
+#TODO: figure out how to get proper triangle based collisions with sphere
+RealWorld.addFile("../models/connect_4.g")
 V = ry.ConfigurationViewer()
 V.setConfiguration(RealWorld)
 
@@ -29,6 +30,7 @@ targetObj.setColor([1.,0,0])
 RealWorld.getFrame("obj0").setShape(ry.ST.ssBox, [.05, .05, .05, .01])
 targetObj.setPosition([-0.1, .1, 0.7])
 targetObj.setContact(1)
+RealWorld.getFrame("connect4").setContact(1)
 
 sticks = []
 for i in range(1, 11):

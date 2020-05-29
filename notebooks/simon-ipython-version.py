@@ -15,6 +15,8 @@ print(cv.__version__)
 #Let's edit the real world before we create the simulation
 RealWorld = ry.Config()
 RealWorld.addFile("../../robotics-course/scenarios/challenge.g")
+#stl seems to be broke
+#RealWorld.addFile("../models/connect_4.g")
 V = ry.ConfigurationViewer()
 V.setConfiguration(RealWorld)
 

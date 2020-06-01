@@ -140,20 +140,59 @@
 	\thispagestyle{empty}
 	\title
 
-    \ex{A1-title}
+    \ex{Objective}
 	
+	We want to have the robot play a game of connect four either with itself or maybe with human interaction. The robot will be able to grasp objects and place them on the connect four board. This behavior should be intelligent and account for fail-cases like misgrasping. Also the game strategy of the robot should be intelligent - implementing a simple connect four AI. We will include support for perception but are not sure how far we will take this part. The interaction with the human may take place by console input in the beginning and for the next step over webcam input. We will strive to have a expandable and modular design of our system, such that it can be understood and expanded.
+	\\
+	\textbf{--- still alot missing here - 0.5 page}
+    \\
     
-	\ex{A2-title}
-	
-	
-    \ex{A3-title}
-	
+	\ex{Work Plan}
+	\textbf{one page -- make this itemized}
+	\\
+	\textbf{maybe add pic of scene with connect 4 model from project folder}
+	\begin{lstlisting}
+			Workpackages
+		State machine         16h        sT        1
+		Robot-internal states
+		State transition framework
+		Different behaviours in the framework
+		Framework             10h        T        1
+		Manage classes 
+		Handle simulation/config space
+		Manage simulation steps
+		Interface to AI
+		Perception             5-20h depending on if perception will be focus    J    -1 
+		Detect connect 4 grid occupation
+		Detect objects (balls) on table
+		Needed: Position recognition
+		Optional: Orientation recognition
+		Optional: Object Identification/Tracking
+		AI                10h        TJs        minor 1, major -1
+		Bot vs Bot
+		Bot vs Human
+		Random
+		Optimal strategy
+		Human UI/UX            5-15h depending on if interaction implementation  J  -1
+		Develop user interface for selection of game mode
+		Console input of column
+		Webcam input
+		Build simulation world/g file    10h        sJ    0
+		Make 3d connect 4 model (Different Shapes to put in)
+		Change Robot placement
+		Create objects (balls) statically/dynamically
+		Manipulation            30h        sJT   1
+		Motion
+		Grasping
+		Dropping
+		Inserting object (ball/coin) into connect 4 grid
+		Collision Handling
+		Perturbation of balls/coins
+		Reachability of objects
+		Find threshold values
+	\end{lstlisting}
 
-    \ex{A4-title}
 	
-	
-	\ex{A5-title}
-
     
 	
 \end{document}

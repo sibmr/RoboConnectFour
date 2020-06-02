@@ -108,7 +108,7 @@
 		\begin{tabular}{rl}
 			Simon Bihlmaier	 	 & 3239454 \\
 			Julian Obst 		 & 3228106 \\
-			Thomas Monninger	 & XXXXXXX \\
+			Thomas Monninger	 & 3470145 \\
 		\end{tabular}
 		
 	\end{center}
@@ -117,7 +117,7 @@
 
 \lhead{Simon Bihlmaier $\quad$ 3239454}
 \chead{Julian Obst 	$\quad$ 3228106}
-\rhead{Thomas Monninger $\quad$ XXXXXXX}
+\rhead{Thomas Monninger $\quad$ 3470145}
 
 
 \usepackage{multicol}
@@ -141,12 +141,23 @@
 	\title
 
     \ex{Objective}
-	
-	We want to have the robot play a game of connect four either with itself or maybe with human interaction. The robot will be able to grasp objects and place them on the connect four board. This behavior should be intelligent and account for fail-cases like misgrasping. Also the game strategy of the robot should be intelligent - implementing a simple connect four AI. We will include support for perception but are not sure how far we will take this part. The interaction with the human may take place by console input in the beginning and for the next step over webcam input. We will strive to have a expandable and modular design of our system, such that it can be understood and expanded.
-	\\
-	\textbf{--- still alot missing here - 0.5 page}
-    \\
-    
+	The objective of this project is to implement the game "Connect Four". The game consists of a play grid placed vertically. The grid is opened at the top so that discs can be inserted. For each column the coins stack up. 
+	"Connect Four" is a game between two players with differently coloured discs. During the game the players alternatingly insert one of their discs in a column of their choice. The goal of this game is to end up with 4 connected discs of the same color. The disc line can be directed either vertically, horizontally or diagonally.\\
+	To cover this objective, a first task will realize the simulation world. This essentially requires building a "Connect Four" grid and place disc objects for the players to manipulate. As a minimal requirement, the objects under manipulation will be balls. This eases the grasping process, the insertion into the grid and avoids potential issues with simulating physics. 
+	As an optional task, the simulation world will provide actual disc-shaped cylinders. This will drastically increase complexity of the robot manipulation and shall therefore be considered as optional. \\
+	The next and biggest part of this objective will be the implementation of manipulation. One robot arm will act as player and realize all actions required to play the game "Connect Four'". This includes grasping of objects and inserting them into the grid of "Connect Four". 
+	The implementation will be based on optimizing constraints regarding position, alignment, orientation and avoiding collisions. Optionally, the high-level behavior of the robot arm should be adaptive and account for fail-cases like misgrasping. 
+	All high-level actions are going to be implemented in a modularized fashion. This means, the functionality will be implemented as library functions and shall be applicable for both robot arms with just one implementation.
+	Therefore, an additional optional task could cover behavior of the other robot arm. This behavior could be implemented as well in order for the second arm to act as an opponent and realize an interactive game mode.\\
+	Third part of the objective will be the implementation of a game logic. The first and most straight-forward logic will be a random insertion. This serves as acceptance criterion and will already yield an interactive game play. 
+	Optionally, the game strategy of the robot can be intelligent. This includes implementing a simple AI to solve the game "Connect Four".
+	Again, this game logic will be implemented in a modularized fashion. Generic functions shall be implemented as library to yield an action based on the current state of the game grid. This allows making use of equal or different AIs in the optional robot vs. robot scenario.\\ 
+	A fully optional part of the objective will be perception. This is optional in alignment with the course project requirements. A perception tool box could provide methods to detect contours of the play grid. Furthermore, the contours could be used by the tool box to yield segmentations of the individual discs. 
+	By analyzing the color of each segment the tool box could eventually yield an occupancy matrix of the game grid.
+	The final contribution to the objective is the implementation of a user interface. As minimal requirement, the interaction with the human takes place by console input. In particular, for each turn the human user shall enter a column so that the robot can execute this move. 
+	Optionally, webcam input or a graphical user interface could be implemented to make the user experience more immersive. If optionally different game modes like human vs. robot or robot vs. robot are implemented the user interface shall provide a selection of game mode at start.
+	Also for this contribution an expandable and modular design of the system shall be achieved, such that it can be understood and easily expanded by the proposed optionals.	\\
+   
 	\ex{Work Plan}
 	\textbf{one page -- make this itemized}
 	\\

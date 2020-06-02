@@ -25,7 +25,7 @@
 \usepackage{multirow}
 \usepackage[top = 2cm, left = 2cm, right = 2cm, bottom = 2cm]{geometry}
 \usepackage{hyperref}
-\usepackage{xcolor}
+\usepackage{xcolor, soul}
 \usepackage{pdfpages}
 
 \usepackage{fancyhdr}
@@ -141,70 +141,131 @@
 	\title
 
     \ex{Objective}
-	The objective of this project is to implement the game "Connect Four". The game consists of a play grid placed vertically. The grid is opened at the top so that discs can be inserted. For each column the coins stack up. 
-	"Connect Four" is a game between two players with differently coloured discs. During the game the players alternatingly insert one of their discs in a column of their choice. The goal of this game is to end up with 4 connected discs of the same color. The disc line can be directed either vertically, horizontally or diagonally.\\
-	To cover this objective, a first task will realize the simulation world. This essentially requires building a "Connect Four" grid and place disc objects for the players to manipulate. As a minimal requirement, the objects under manipulation will be balls. This eases the grasping process, the insertion into the grid and avoids potential issues with simulating physics. 
-	As an optional task, the simulation world will provide actual disc-shaped cylinders. This will drastically increase complexity of the robot manipulation and shall therefore be considered as optional. \\
-	The next and biggest part of this objective will be the implementation of manipulation. One robot arm will act as player and realize all actions required to play the game "Connect Four'". This includes grasping of objects and inserting them into the grid of "Connect Four". 
-	The implementation will be based on optimizing constraints regarding position, alignment, orientation and avoiding collisions. Optionally, the high-level behavior of the robot arm should be adaptive and account for fail-cases like misgrasping. 
-	All high-level actions are going to be implemented in a modularized fashion. This means, the functionality will be implemented as library functions and shall be applicable for both robot arms with just one implementation.
-	Therefore, an additional optional task could cover behavior of the other robot arm. This behavior could be implemented as well in order for the second arm to act as an opponent and realize an interactive game mode.\\
-	Third part of the objective will be the implementation of a game logic. The first and most straight-forward logic will be a random insertion. This serves as acceptance criterion and will already yield an interactive game play. 
-	Optionally, the game strategy of the robot can be intelligent. This includes implementing a simple AI to solve the game "Connect Four".
-	Again, this game logic will be implemented in a modularized fashion. Generic functions shall be implemented as library to yield an action based on the current state of the game grid. This allows making use of equal or different AIs in the optional robot vs. robot scenario.\\ 
-	A fully optional part of the objective will be perception. This is optional in alignment with the course project requirements. A perception tool box could provide methods to detect contours of the play grid. Furthermore, the contours could be used by the tool box to yield segmentations of the individual discs. 
-	By analyzing the color of each segment the tool box could eventually yield an occupancy matrix of the game grid.\\
-	The final contribution to the objective is the implementation of a user interface. As minimal requirement, the interaction with the human takes place by console input. In particular, for each turn the human user shall enter a column so that the robot can execute this move. 
-	Optionally, webcam input or a graphical user interface could be implemented to make the user experience more immersive. If optionally different game modes like human vs. robot or robot vs. robot are implemented the user interface shall provide a selection of game mode at start.
-	Also for this contribution an expandable and modular design of the system shall be achieved, such that it can be understood and easily expanded by the proposed optionals.	\\
+	The objective of this project is to implement the game ``Connect Four''. 
+	The game consists of a play grid placed vertically. 
+	The grid is opened at the top so that discs can be inserted. 
+	For each column the coins stack up. 
+	``Connect Four'' is a game between two players with differently coloured discs. 
+	During the game the players alternately insert one of their discs in a column of their choice. 
+	The goal of the game is to end up with 4 connected discs of the same color. 
+	The disc line can be directed either vertically, horizontally or diagonally.
+	
+	\hl{To cover this objective, a first task will realize the simulation world}. 
+	This essentially requires building a ``Connect Four'' grid and place disc objects for the players to manipulate. 
+	As a minimal requirement, the objects under manipulation will be balls. 
+	This eases the grasping process, the insertion into the grid and avoids potential issues with simulating physics. 
+	As an optional task, the simulation world will provide actual disc-shaped cylinders. 
+	This will drastically increase complexity of the robot manipulation and shall therefore be considered as optional. 
+	
+	\hl{The next and biggest part of this objective will be the implementation of manipulation.} 
+	One robot arm will act as player and realize all actions required to play the game ``Connect Four''. 
+	This includes grasping of objects and inserting them into the grid of ``Connect Four''. 
+	\hl{The implementation will be based on optimizing constraints regarding position, alignment, orientation and avoiding collisions.} 
+	Optionally, the high-level behavior of the robot arm should be adaptive and account for fail-cases like misgrasping. 
+	\hl{All high-level actions are going to be implemented in a modularized fashion.
+	This means, the functionality will be implemented as library functions and shall be applicable for both robot arms with just one implementation.
+	Therefore, an additional optional task could cover behavior of the other robot arm.}
+	This behavior could be implemented as well in order for the second arm to act as an opponent and realize an interactive game mode.
+	
+	Third part of the objective will be the implementation of a game logic. 
+	The first and most straight-forward logic will be a random insertion. 
+	This serves as acceptance criterion and will already yield an interactive game play. 
+	Optionally, the game strategy of the robot can be intelligent. 
+	\hl{This includes implementing a simple AI to solve the game ``Connect Four''.
+	Again, this game logic will be implemented in a modularized fashion. 
+	Generic functions shall be implemented as library to yield an action based on the current state of the game grid. 
+	This allows making use of equal or different AIs in the optional robot vs. robot scenario.}
+	 
+	A fully optional part of the objective will be perception. 
+	This is optional in alignment with the course project requirements. 
+	A perception tool box could provide methods to detect contours of the play grid. 
+	Furthermore, the contours could be used by the tool box to yield segmentations of the individual discs. 
+	By analyzing the color of each segment the tool box could eventually yield an occupancy matrix of the game grid.
+	
+	The final contribution to the objective is the implementation of a user interface. 
+	As minimal requirement, the interaction with the human takes place by console input. 
+	In particular, for each turn the human user shall enter a column so that the robot can execute this move. 
+	Optionally, webcam input or a graphical user interface could be implemented to make the user experience more immersive. 
+	If optionally different game modes like human vs. robot or robot vs. robot are implemented the user interface shall provide a selection of game mode at start.
+	\hl{Also for this contribution an expandable and modular design of the system shall be achieved, such that it can be understood and easily expanded by the proposed optionals.}
    
 	\ex{Work Plan}
-	\textbf{one page -- make this itemized}
-	\\
-	\textbf{maybe add pic of scene with connect 4 model from project folder}
-	\begin{lstlisting}
-			Workpackages
-		State machine         16h        sT        1
-		Robot-internal states
-		State transition framework
-		Different behaviours in the framework
-		Framework             10h        T        1
-		Manage classes 
-		Handle simulation/config space
-		Manage simulation steps
-		Interface to AI
-		Perception             5-20h depending on if perception will be focus    J    -1 
-		Detect connect 4 grid occupation
-		Detect objects (balls) on table
-		Needed: Position recognition
-		Optional: Orientation recognition
-		Optional: Object Identification/Tracking
-		AI                10h        TJs        minor 1, major -1
-		Bot vs Bot
-		Bot vs Human
-		Random
-		Optimal strategy
-		Human UI/UX            5-15h depending on if interaction implementation  J  -1
-		Develop user interface for selection of game mode
-		Console input of column
-		Webcam input
-		Build simulation world/g file    10h        sJ    0
-		Make 3d connect 4 model (Different Shapes to put in)
-		Change Robot placement
-		Create objects (balls) statically/dynamically
-		Manipulation            30h        sJT   1
-		Motion
-		Grasping
-		Dropping
-		Inserting object (ball/coin) into connect 4 grid
-		Collision Handling
-		Perturbation of balls/coins
-		Reachability of objects
-		Find threshold values
-	\end{lstlisting}
-
+	In the following we will present our workpackages.
+	These are further described by their main components.
+	We made an estimate to what we think will be the time to complete a certain package.
+	In general, all team members work on each workpackage.
+	Personal preference lets each team member decide his priority on the pending workpackages.
+	The packages are given in the order of their priority.
 	
-    
+	\section*{Workpackages}
+	\noindent
+	Build simulation world/g file (10h)
+	\begin{itemize}
+	\item Make 3d connect 4 model (Different Shapes to put in)
+	\item Change Robot placement
+	\item Create objects (balls) statically/dynamically	
+	\end{itemize}
+	
+	\noindent
+	Framework (10h)
+	\begin{itemize}
+	\item Manage classes 
+	\item Handle simulation/config space
+	\item Manage simulation steps
+	\item Interface to AI	
+	\end{itemize}
+	
+	\noindent
+	State machine (16h)
+	\begin{itemize}
+	\item Robot-internal states
+	\item State transition framework
+	\item Different behaviours in the framework
+	\end{itemize}
+	
+	\noindent
+	Manipulation (30h)
+	\begin{itemize}
+	\item Motion
+	\item Grasping
+	\item Dropping
+	\item Inserting object (ball/coin) into connect 4 grid
+	\item Collision Handling
+	\item Perturbation of balls/coins
+	\item Reachability of objects
+	\item Find threshold values	
+	\end{itemize}
+	
+	\noindent
+	AI (10h)
+	\begin{itemize}
+	\item Bot vs Bot
+	\item Bot vs Human
+	\item Random
+	\item Optimal strategy	
+	\end{itemize}
+	
+	\pagebreak\noindent
+	Perception (5-20h depending on focus) 
+	\begin{itemize}
+	\item Detect connect 4 grid occupation
+	\item Detect objects (balls) on table
+		\begin{itemize}
+		\item Needed: Position recognition
+		\item Optional: Orientation recognition
+		\item Optional: Object Identification/Tracking	
+		\end{itemize}
+	\end{itemize}
+	
+	\noindent
+	Human UI/UX (5-15h depending on implementation)
+	\begin{itemize}
+	\item Develop user interface for selection of game mode
+	\item Console input of column
+	\item Webcam input
+	\end{itemize}
+	
+	\image{Connect-4-concept}
 	
 \end{document}
 

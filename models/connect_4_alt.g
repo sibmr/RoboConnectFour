@@ -1,7 +1,7 @@
 frame world 	{  }
 frame connect4(world)   {}
 ## this should be the visible model - still uses its collisions when uncommented
-##frame connect4_vis(connect4) 		{  shape:mesh                             pose=<T 0 0 0.8 0 0 0 1 > meshscale=0.001 color:[ 0.9 0.9 0.9 1 ]  mesh:'meshes/Connect4-6X7.stl' visual  }
+##frame connect4_vis(connect4) 		{  shape:mesh                             pose=<T 0 0 0.8 0 0 0 1 > meshscale=0.001 color:[ 0.9 0.9 0.9 1 ]  mesh:'meshes/Connect4-6X7_visible.ply' visual  }
 ## these are the approximate convex collision shapes for the model 
 frame connect4_coll1(connect4) 		{  shape:mesh  color:[ 0.8 0.2 0.2 0.2 ]  pose=<T 0 0 0.8 0 0 0 1 > meshscale=0.001 mesh:'meshes/Connect4-6X7-convex/Connect4-6X7_hull_1.stl'   noVisual, contact:-2  logical:{ } friction:.001  }
 frame connect4_coll2(connect4) 		{  shape:mesh  color:[ 0.8 0.2 0.2 0.2 ]  pose=<T 0 0 0.8 0 0 0 1 > meshscale=0.001 mesh:'meshes/Connect4-6X7-convex/Connect4-6X7_hull_2.stl'   noVisual, contact:-2  logical:{ } friction:.001  }

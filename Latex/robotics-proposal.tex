@@ -83,7 +83,7 @@
 
 
 \begin{center}
-	\includegraphics[width = .8 \textwidth]{img/#1}
+	\includegraphics[width = 1.0\textwidth]{img/#1}
 \end{center}
 }
 
@@ -203,83 +203,90 @@
 
 	\section*{Workpackages}
 	The assignment of workpackages to persons is not final. 
-	Given the fact that the effort of each workpackage is not fully determined task assignment may change during progress.
+	Given the fact that the effort of each workpackage is not fully determined task assignment may change during progress.\\
+	Mandatory tasks will be completed as minimial scope and are denoted with `M'.\\
+	Optional tasks represent additional effort exceeding the base features and are denoted with `O'.
 	\\
 
 	\noindent
 	\textbf{Build simulation world, create g file} (10h) - Simon, Julian\\
 	The simulation world shall provide a setup of the game ``Connect Four''.
 	\begin{itemize}
-	\item Define 3D grid of the game ``Connect Four'' (different shapes of objects to put in)
-	\item Change Robot placement according to the game setting
-	\item Define camera placement to cover all required detections
-	\item Create game objects (balls or disc) statically or dynamically	
+	\item M - Define 3D grid of the game ``Connect Four'' (different shapes of objects to put in)
+	\item M - Change Robot placement according to the game setting
+	\item O - Define camera placement to cover all required detections
+	\item M - Create game objects (balls or disc) statically
+	\item O - Spawn game objects (balls or discs) dynamically in a random fashion on or above the table	
 	\end{itemize}
 	
 	\noindent
 	\textbf{Framework} (10h) - Thomas\\
 	The framework covers all architectural components of the software.
 	\begin{itemize}
-	\item Define classes towards modularized approach
-	\item Handle simulation and configuration space
-	\item Manage simulation steps in accordance with manipulation constraints
-	\item Define interfaces to game logic, perception and user
+	\item M - Define classes towards modularized approach
+	\item M - Handle simulation and configuration space
+	\item M - Manage simulation steps in accordance with manipulation constraints
+	\item M - Define interfaces to game logic, perception and user
 	\end{itemize}
 	
 	\noindent
 	\textbf{State machine} (16h) - Simon, Thomas\\
 	The state machine shall define the behavior of a robot arm. This covers its states and transitions.
 	\begin{itemize}
-	\item Define robot-internal states
-	\item Derive state transition framework
-	\item Realize state machines to cover different behaviours 
+	\item M - Define robot-internal states
+	\item M - Derive state transition framework
+	\item M - Implement state machines to cover different behaviours 
 	\end{itemize}
 	
 	\noindent
 	\textbf{Manipulation} (30h) - Simon, Julian, Thomas\\
 	Manipulation defines the movements and actions of the robot.
 	\begin{itemize}
-	\item Motion: Move to position, align orientation, ...
-	\item Implement gripper controls (Grasping and Dropping)
-	\item Insert object (ball or disc) into ``Connect Four'' grid
-	\item Collision Handling
-	\item Perturbation of objects (balls or discs) 
-	\item Reachability of objects
-	\item Find appropriate threshold values for state transitions
+	\item M - Motion: Move to position, align orientation, ...
+	\item M - Implement gripper controls (Grasping and Dropping)
+	\item M - Insert object (ball or disc) into ``Connect Four'' grid
+	\item M - Collision Handling
+	\item O - Perturbation of objects (balls or discs) 
+	\item O -Reachability of objects
+	\item M - Find appropriate threshold values for state transitions
 	\end{itemize}
 	
 	\noindent
 	\textbf{Game agent} (10h) - Thomas, Julian, Simon\\
 	The game agent yields an action for a given game state.
 	\begin{itemize}
-	\item Game modes: Bot vs. Bot, Bot vs. Human
-	\item Define game states and transitions
-	\item Random strategy
-	\item Optimal strategy (AI)
+	\item M - Game mode 1:  Robot vs. Human
+	\item O - Game mode 2:  Robot vs. Robot
+	\item M - Define game states and transitions
+	\item M - Random strategy
+	\item O - Optimal strategy (AI)
 	\end{itemize}
 	
 	\noindent
 	\textbf{Perception} (5-20h depending on focus) - Julian\\
 	The perception provides methods to detect the occupancy of the game grid and to locate objects on the table.
 	\begin{itemize}
-	\item Implement generic computer vision methods
+	\item O - Implement generic computer vision methods
 		\begin{itemize}
 		\item Contour detection and segmentation
 		\item Filtering
 		\item Object identification
 		\item Object tracking	
 		\end{itemize}
-	\item Detect ``Connect Four'' grid occupation
-	\item Detect, classify and track objects (balls or discs) on table
+	\item O - Detect ``Connect Four'' grid occupation
+	\item O - Detect, classify and track objects (balls or discs) on table
 	\end{itemize}
 	
 	\noindent
 	\textbf{Human UI/UX} (5-15h depending on implementation) - Julian\\
 	Basic human - robot interaction for the game ``Connect Four''.
 	\begin{itemize}
-	\item Develop user interface for selection of game mode
-	\item Handle input from different sources (console, webcam, ...)	
-	\item Provide output to user (simulation rendering, game score, ...)
+	\item M - Develop user interface for selection of game mode
+	\item M - Handle input from console
+	\item O - Handle input from alternative sources (webcam, ...)	
+	\item O - Develop graphical user interface to facilitate inputs
+	\item M - Provide simulation rendering to user
+	\item M - Display game score to user
 	\end{itemize}
 	
 	\begin{figure}[H]

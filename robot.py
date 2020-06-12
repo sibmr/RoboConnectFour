@@ -57,7 +57,7 @@ class Robot(object):
         [y,J] = self.C.evalFeature(self.ry.FS.positionDiff, [obj1, obj2])
         return y, J
 
-    def move_gripper_to_pos(self, gripper, pos):
+    def move_gripper_to_pos(self, gripper, pos, align_vec_z=None):
         """
         gripper:    gripper that will be moved
         pos:        position to move the gripper to
@@ -74,7 +74,7 @@ class Robot(object):
             return True
         
         self.optimization_objective.clear()
-        self.optimization_objective.move_to_position(gripper, pos)
+        self.optimization_objective.move_to_position(gripper, pos, align_vec_z=align_vec_z)
         q = self.optimize_and_update()
         self.step_simulation(q)
         return False

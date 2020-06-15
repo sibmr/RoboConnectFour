@@ -1,4 +1,10 @@
 import numpy as np
+from enum import Enum
+
+class RobotState(Enum):
+    grasp = 1
+    insert = 2
+    drop = 3
 
 class RobotStateMachine(object):
     """
@@ -74,7 +80,7 @@ class RobotIdleProgram(RobotStateMachine):
 class RobotConnectFourProgram(RobotStateMachine):
     def __init__(self, robot):
         self.robot = robot
-        self.RSTATE = 0
+        self.RSTATE = RobotState.grasp
         self.sphere_count = 1
         self.max_spheres = 24
         self.drop_pos =     [
@@ -89,18 +95,18 @@ class RobotConnectFourProgram(RobotStateMachine):
         self.need_new_sphere = True
 
     def step(self):
-        if self.RSTATE == 0:
+        if self.RSTATE == RobotState.grasp:
             finish = self.robot.grasp("R_gripper", "sphere{}".format(self.sphere_count))
             if finish:
-                self.RSTATE = 1
-        elif self.RSTATE == 1:
+                self.RSTATE = RobotState.insert
+        elif self.RSTATE == RobotState.insert:
             pos = self.drop_pos[0]
             finish = self.robot.move_gripper_to_pos("R_gripper", pos, align_vec_z = [0,0,1])
             if finish:
                 self.sphere_count += 1
                 self.need_new_sphere = True
-                self.RSTATE = 2
-        elif self.RSTATE == 2:
+                self.RSTATE = RobotState.drop
+        elif self.RSTATE == RobotState.drop:
             finish = self.robot.delayed_open_gripper("R_gripper", 50)
             if finish:
-                self.RSTATE = 0
+                self.RSTATE = RobotState.grasp

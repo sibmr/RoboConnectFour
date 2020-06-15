@@ -3,8 +3,9 @@ from enum import Enum
 
 class RobotState(Enum):
     grasp = 1
-    insert = 2
-    drop = 3
+    lift = 2
+    insert = 3
+    drop = 4
 
 class RobotStateMachine(object):
     """
@@ -98,15 +99,20 @@ class RobotConnectFourProgram(RobotStateMachine):
         if self.RSTATE == RobotState.grasp:
             finish = self.robot.grasp("R_gripper", "sphere{}".format(self.sphere_count))
             if finish:
+                self.RSTATE = RobotState.lift
+        elif self.RSTATE == RobotState.lift:
+            pos = self.drop_pos[4]
+            finish = self.robot.lift_gripper_to_z("R_gripper", z=pos[2]+0.0)
+            if finish:
                 self.RSTATE = RobotState.insert
         elif self.RSTATE == RobotState.insert:
-            pos = self.drop_pos[0]
-            finish = self.robot.move_gripper_to_pos("R_gripper", pos, align_vec_z = [0,0,1])
+            pos = self.drop_pos[4]
+            finish = self.robot.move_gripper_to_pos("R_gripper", pos=pos, align_vec_z = [0,0,1])
             if finish:
                 self.sphere_count += 1
                 self.need_new_sphere = True
                 self.RSTATE = RobotState.drop
         elif self.RSTATE == RobotState.drop:
-            finish = self.robot.delayed_open_gripper("R_gripper", 50)
+            finish = self.robot.delayed_open_gripper("R_gripper", delay=50)
             if finish:
                 self.RSTATE = RobotState.grasp

@@ -57,20 +57,34 @@ class Robot(object):
         [y,J] = self.C.evalFeature(self.ry.FS.positionDiff, [obj1, obj2])
         return y, J
 
+    def lift_gripper_to_z(self, gripper, z):
+        """
+        gripper:    gripper that will be moved
+        z:          z position to move the gripper to
+        return:     0 if behavior has not terminated,
+                    else return integer indicating status of behavior or behavior termination
+        """
+        print("Lift")
+        self.optimization_objective.clear()
+        diff, _ = self.C.evalFeature(self.ry.FS.position, [gripper + "Center"])
+        diff[2] = z # TODO nicer way to lift gripper?
+        return self.move_gripper_to_pos(gripper, pos=diff)
+
     def move_gripper_to_pos(self, gripper, pos, align_vec_z=None):
         """
         gripper:    gripper that will be moved
         pos:        position to move the gripper to
-        return:     0 if behavior has not terminated, 
+        return:     0 if behavior has not terminated,
                     else return integer indicating status of behavior or behavior termination
         """
         print("Move")
-        # The high-level grasp task is only finished when the simulation yields getGripperIsGrasping == True
         q = self.S.get_q()
-        diff,_ = self.C.evalFeature(self.ry.FS.position, [gripper + "Center"])
+        diff, _ = self.C.evalFeature(self.ry.FS.position, [gripper + "Center"])
         diff -= np.array(pos)
         # TODO decide between np.linalg.norm(y) and np.abs(y).max()
-        if np.linalg.norm(diff) < 0.02: #np.abs(y).max() < 1e-2:
+        print("norm", str(np.linalg.norm(diff)))
+        print("max", str(np.abs(diff).max()))
+        if np.linalg.norm(diff) < 0.03: #np.abs(y).max() < 1e-2:
             return True
         
         self.optimization_objective.clear()
@@ -117,7 +131,7 @@ class Robot(object):
         # TODO decide between np.linalg.norm(y) and np.abs(y).max()
         if not self.is_closing and np.linalg.norm(y) < 0.02: #np.abs(y).max() < 1e-2:
             print("Closing Gripper")
-            self.S.closeGripper(gripper)
+            self.S.closeGripper(gripper, speed=2.0)
             self.is_closing = True # Avoid that closeGripper() is called multiple times
         
         self.optimization_objective.clear()

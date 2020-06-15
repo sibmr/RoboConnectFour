@@ -87,8 +87,8 @@ points0 = S.depthData2pointCloud(depth0, fxfypxpy)
 # -------------------------------------------------------------
 
 
-#for i in range(1,121):
-#    C.getFrame("connect4_coll{}".format(i)).setContact(1)
+for i in range(1,121):
+    C.getFrame("connect4_coll{}".format(i)).setContact(1)
 
 perceived_spheres =[]
 for i in range(len(sim_spheres)):

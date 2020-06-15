@@ -33,7 +33,7 @@ class OptimizationObjective(object):
         constraints gripping specified object with specified gripper
         """
         ry = self.ry
-        self.komo.addObjective([1.], ry.FS.positionDiff, [gripper+"Center",obj], ry.OT.sos, [1e3])
+        self.komo.addObjective([1.], ry.FS.positionDiff, [gripper+"Center",obj], ry.OT.sos, [3e3])
         #self.komo.addObjective([1.], ry.FS.positionDiff, [gripper, obj], ry.OT.sos, [1e2])
         self.komo.addObjective([1.], ry.FS.vectorZ, [gripper], ry.OT.sos, [1e2], target=[0,0,1])
         #self.komo.addObjective([1.], ry.FS.scalarProductXZ, [obj,gripper], ry.OT.sos, [1e2])

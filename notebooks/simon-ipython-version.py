@@ -18,7 +18,7 @@ RealWorld.addFile("../../robotics-course/scenarios/challenge.g")
 #collisions are off
 #TODO: figure out how to get proper triangle based collisions with sphere
 #RealWorld.addFile("../models/connect_4.g")
-RealWorld.addFile("../models/connect_4_ssbox.g")
+RealWorld.addFile("../models/connect_4_6x7_simple.g")
 #RealWorld.addFile("../models/connect_4_test.g")
 V = ry.ConfigurationViewer()
 V.setConfiguration(RealWorld)

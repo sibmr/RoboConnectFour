@@ -18,7 +18,7 @@ RealWorld.addFile("../../robotics-course/scenarios/challenge.g")
 #collisions are off
 #TODO: figure out how to get proper triangle based collisions with sphere
 #RealWorld.addFile("../models/connect_4.g")
-RealWorld.addFile("../models/connect_4_balls.g")
+RealWorld.addFile("../models/connect_4_ssbox.g")
 #RealWorld.addFile("../models/connect_4_test.g")
 V = ry.ConfigurationViewer()
 V.setConfiguration(RealWorld)
@@ -33,8 +33,8 @@ RealWorld.getFrame("obj0").setShape(ry.ST.ssBox, [.05, .05, .05, .01])
 targetObj.setPosition([-0.1, .1, 0.7])
 targetObj.setContact(1)
 # TODO need to re set contact somehow - causes error like this for coll model
-for i in range(1,121):
-    RealWorld.getFrame("connect4_coll{}".format(i)).setContact(1)
+#for i in range(1,121):
+#    RealWorld.getFrame("connect4_coll{}".format(i)).setContact(1)
 
 sticks = []
 for i in range(1, 11):

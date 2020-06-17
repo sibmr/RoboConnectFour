@@ -11,6 +11,7 @@ print(cv.__version__)
 
 connect_4_model_file = "../models/connect_4_6x7_simple.g"
 connect_4_sphere_file = "../models/connect_4_balls_simple.g"
+ball_ramp_file = "../models/ball_ramp_conv.g"
 pandas_model_file = '../../robotics-course/scenarios/pandasTable.g'
 
 # In[2]
@@ -24,6 +25,7 @@ RealWorld = ry.Config()
 RealWorld.addFile(pandas_model_file)
 RealWorld.addFile(connect_4_model_file)
 RealWorld.addFile(connect_4_sphere_file)
+RealWorld.addFile(ball_ramp_file)
 V = ry.ConfigurationViewer()
 V.setConfiguration(RealWorld)
 
@@ -43,6 +45,9 @@ for i in range(1,25):
     sphere = RealWorld.getFrame("sphere{}".format(i))
     sphere.setContact(1)
     sim_spheres.append(sphere)
+
+for i in range(1,6):
+    RealWorld.getFrame("ball_ramp{}".format(i)).setContact(1)
 
 V.recopyMeshes(RealWorld)
 V.setConfiguration(RealWorld)

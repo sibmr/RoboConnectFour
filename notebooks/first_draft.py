@@ -9,8 +9,8 @@ import libry as ry
 import time
 print(cv.__version__)
 
-connect_4_model_file = "../models/connect_4_6x7.g"
-connect_4_sphere_file = "../models/connect_4_balls.g"
+connect_4_model_file = "../models/connect_4_6x7_simple.g"
+connect_4_sphere_file = "../models/connect_4_balls_simple.g"
 pandas_model_file = '../../robotics-course/scenarios/pandasTable.g'
 
 # In[2]
@@ -35,7 +35,7 @@ V.setConfiguration(RealWorld)
 
 # set contacts for models in the scene
 # TODO check if we need to do this for RealWorld
-for i in range(1,121):
+for i in range(1,12):
     RealWorld.getFrame("connect4_coll{}".format(i)).setContact(1)
 
 sim_spheres = []
@@ -87,11 +87,11 @@ points0 = S.depthData2pointCloud(depth0, fxfypxpy)
 # -------------------------------------------------------------
 
 
-for i in range(1,121):
+for i in range(1,11):
     C.getFrame("connect4_coll{}".format(i)).setContact(1)
 
 perceived_spheres =[]
-for i in range(len(sim_spheres)):
+for i in range(1,len(sim_spheres)):
     sphere = C.addFrame("sphere{}".format(i))
     sphere.setShape(ry.ST.sphere, [.022])
     sphere.setColor([0,0,1])
@@ -115,6 +115,8 @@ from robot_state_machine import RobotConnectFourProgram
 robo = Robot(0.01, C, V, S, ry)
 robo_program = RobotConnectFourProgram(robo)
 
+waiting_for_input = False
+
 for t in range(10000):
 
     # do perception every 10th timestep - rendering is slow
@@ -123,7 +125,7 @@ for t in range(10000):
         points = S.depthData2pointCloud(depth, fxfypxpy)
        
         # skipping perception
-        for i in range(len(sim_spheres)):
+        for i in range(len(sim_spheres)-1):
             p_obj = sim_spheres[i].getPosition()   
             r_obj = sim_spheres[i].getQuaternion()
             perceived_spheres[i].setPosition(p_obj)
@@ -133,13 +135,22 @@ for t in range(10000):
         V.setConfiguration(C)
     
     # put new sphere on table if needed
-    print(robo_program.need_new_sphere)
     if robo_program.need_new_sphere:
         # this does not move sphere
         # TODO find out how to move sphere in sim
-        sim_spheres[robo_program.sphere_count].setPosition([0,-0.2,0.8])
-        robo_program.need_new_sphere = False
+        sim_spheres[robo_program.sphere_id].setPosition([0,-0.2,0.8])
+        
+        # TODO do something here for the ai
+        # ------------------------
+        if not waiting_for_input:
+            robo_program.drop_spot = 5
+            robo_program.sphere_id += 1
+        if robo_program.sphere_id == 4: # TODO use other condition
+            waiting_for_input = True
+        # ------------------------
 
+        robo_program.need_new_sphere = waiting_for_input
+        
     # do state update
     robo_program.step()
 

@@ -27,6 +27,8 @@ class Robot(object):
         self.is_closing = False
         self.gripper_open_delay = 0
         self.gripper_width_threshold = 1e-3 # TODO tbd
+
+        self.init_q = self.S.get_q()
         
     def optimize_and_update(self):
         """
@@ -66,9 +68,16 @@ class Robot(object):
         """
         print("Lift")
         self.optimization_objective.clear()
-        diff, _ = self.C.evalFeature(self.ry.FS.position, [gripper + "Center"])
-        diff[2] = z # TODO nicer way to lift gripper?
-        return self.move_gripper_to_pos(gripper, pos=diff)
+        stepsize = 0.1
+        pos, _ = self.C.evalFeature(self.ry.FS.position, [gripper + "Center"])
+        diff = z-pos[2]
+        if diff > 2*stepsize:
+            normdiff = diff/np.linalg.norm(diff)
+            pos[2] = pos[2] + normdiff*stepsize
+            self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1])
+        else:
+            pos[2] = z
+            return self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1]) 
 
     def move_gripper_to_pos(self, gripper, pos, align_vec_z=None):
         """
@@ -158,10 +167,17 @@ class Robot(object):
             return True
         return False
 
+    def go_to_init_q(self):
+        self.optimization_objective.clear()
+        self.optimization_objective.go_to_q(self.init_q)
+        q = self.optimize_and_update()
+        self.step_simulation(q)
+        return False
+
     def open_gripper(self):
-        # TODO this is sketched code and needs work
-        # only optimization objectives -> move to robot
         if not self.is_opening:
             self.S.openGripper("R_gripper")
             self.opening = True
         return self.S.getGripperWidth("R_gripper") < self.gripper_width_threshold
+
+    

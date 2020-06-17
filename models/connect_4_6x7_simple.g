@@ -19,10 +19,10 @@ frame connect4_coll1(connect4) 		{  shape:mesh  color:[ 0.9 0.9 0.9 1 ]    pose=
 frame connect4_coll11(connect4) 	{  shape:mesh  color:[ 0.9 0.9 0.9 1 ]    pose=<T 0 0 0.65 0 0 0 1 > meshscale=0.001 mesh:'meshes/simple_model/Connect4-6X7-simple-11.stl'    contact:-2  logical:{ } friction:.00001  }
 
 ## sphere for testing collision
-sphere2 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-0.205,-0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-sphere3 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-0.145,-0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-sphere4 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-0.07, -0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-sphere5 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.00, -0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-sphere6 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.07, -0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-sphere7 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.14, -0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2} 
-sphere1 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.205,-0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+#sphere2 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-0.205,-0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+#sphere3 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-0.145,-0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+#sphere4 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-0.07, -0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+#sphere5 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.00, -0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+#sphere6 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.07, -0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+#sphere7 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.14, -0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2} 
+#sphere1 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.205,-0.05, 1.5, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}

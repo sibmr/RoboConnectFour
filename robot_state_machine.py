@@ -10,6 +10,7 @@ class RobotState(Enum):
     align_z = 6
     going_to_init_q = 7
     idle = 8
+    move_above_object = 9
 
 class RobotStateMachine(object):
     """
@@ -86,7 +87,7 @@ class RobotConnectFourProgram(RobotStateMachine):
     def __init__(self, robot):
         self.robot = robot
         self.RSTATE = RobotState.going_to_init_q
-        self.sphere_id = 0
+        self.sphere_id = 3
         self.drop_spot = 0
         self.max_spheres = 24
         self.drop_pos =     [
@@ -101,6 +102,7 @@ class RobotConnectFourProgram(RobotStateMachine):
         self.need_new_sphere = True
 
     def step(self):
+        # initq -> move above object -> grasp -> lift -> align_pos -> drop -> initq
         if self.RSTATE == RobotState.grasp:
             finish = self.robot.grasp("R_gripper", "sphere{}".format(self.sphere_id))
             if finish:
@@ -122,9 +124,13 @@ class RobotConnectFourProgram(RobotStateMachine):
             finish = self.robot.delayed_open_gripper("R_gripper", delay=100)
             if finish:
                 self.RSTATE = RobotState.going_to_init_q
-        
         elif self.RSTATE == RobotState.going_to_init_q:
             if not self.sphere_id is None and not self.need_new_sphere:
-                self.RSTATE = RobotState.grasp
+                self.RSTATE = RobotState.move_above_object
             else:
                 self.robot.go_to_init_q()
+        elif self.RSTATE == RobotState.move_above_object:
+            sphere_name = "sphere{}".format(self.sphere_id)
+            finish = self.robot.move_gripper_to_pos("R_gripper", pos=[0,0,0.3], align_vec_z = [0,0,1], rel_to_object=sphere_name)
+            if finish:
+                self.RSTATE = RobotState.grasp

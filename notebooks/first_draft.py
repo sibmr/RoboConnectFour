@@ -72,6 +72,7 @@ S.addSensor("camera")
 C = ry.Config()
 C.addFile(pandas_model_file)
 C.addFile(connect_4_model_file)
+C.addFile(ball_ramp_file)
 #V = ry.ConfigurationViewer()
 V.setConfiguration(C)
 cameraFrame = C.frame("camera")
@@ -95,6 +96,9 @@ points0 = S.depthData2pointCloud(depth0, fxfypxpy)
 for i in range(1,11):
     C.getFrame("connect4_coll{}".format(i)).setContact(1)
 
+for i in range(1,6):
+    C.getFrame("ball_ramp{}".format(i)).setContact(1)
+
 perceived_spheres =[]
 for i in range(1,len(sim_spheres)):
     sphere = C.addFrame("sphere{}".format(i))
@@ -117,7 +121,7 @@ sys.path.append('../')
 from robot import Robot
 from robot_state_machine import RobotConnectFourProgram
 
-robo = Robot(0.01, C, V, S, ry)
+robo = Robot(0.015, C, V, S, ry)
 robo_program = RobotConnectFourProgram(robo)
 
 waiting_for_input = False
@@ -150,7 +154,7 @@ for t in range(10000):
         if not waiting_for_input:
             robo_program.drop_spot = 5
             robo_program.sphere_id += 1
-        if robo_program.sphere_id == 4: # TODO use other condition
+        if robo_program.sphere_id == 10: # TODO use other condition
             waiting_for_input = True
         # ------------------------
 

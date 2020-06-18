@@ -79,7 +79,7 @@ class Robot(object):
             pos[2] = z
             return self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1]) 
 
-    def move_gripper_to_pos(self, gripper, pos, align_vec_z=None):
+    def move_gripper_to_pos(self, gripper, pos, align_vec_z=None, rel_to_object=None):
         """
         gripper:    gripper that will be moved
         pos:        position to move the gripper to
@@ -87,9 +87,15 @@ class Robot(object):
                     else return integer indicating status of behavior or behavior termination
         """
         print("Move")
+        
+        obj_pos = np.array([0,0,0])
+        if rel_to_object:
+            obj_pos, _ = self.C.evalFeature(self.ry.FS.position, [rel_to_object])
+        
         q = self.S.get_q()
         diff, _ = self.C.evalFeature(self.ry.FS.position, [gripper + "Center"])
-        diff -= np.array(pos)
+        diff -= np.array(obj_pos+pos)
+        
         # TODO decide between np.linalg.norm(y) and np.abs(y).max()
         print("norm", str(np.linalg.norm(diff)))
         print("max", str(np.abs(diff).max()))
@@ -97,7 +103,7 @@ class Robot(object):
             return True
         
         self.optimization_objective.clear()
-        self.optimization_objective.move_to_position(gripper, pos, align_vec_z=align_vec_z)
+        self.optimization_objective.move_to_position(gripper, obj_pos + pos, align_vec_z=align_vec_z)
         q = self.optimize_and_update()
         self.step_simulation(q)
         return False

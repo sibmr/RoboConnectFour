@@ -125,6 +125,7 @@ robo = Robot(0.015, C, V, S, ry)
 robo_program = RobotConnectFourProgram(robo)
 
 waiting_for_input = False
+last_input = None
 
 for t in range(10000):
 
@@ -132,7 +133,8 @@ for t in range(10000):
     if t%10 == 0:
         [rgb, depth] = S.getImageAndDepth()
         points = S.depthData2pointCloud(depth, fxfypxpy)
-       
+        bgr = cv.cvtColor(rgb,cv.COLOR_RGB2BGR)
+
         # skipping perception
         for i in range(len(sim_spheres)-1):
             p_obj = sim_spheres[i].getPosition()   
@@ -140,9 +142,17 @@ for t in range(10000):
             perceived_spheres[i].setPosition(p_obj)
             perceived_spheres[i].setQuaternion(r_obj)
 
-        V.recopyMeshes(C)
-        V.setConfiguration(C)
+        if len(rgb)>0: cv.imshow('OPENCV - rgb', bgr)
+        if len(depth)>0: cv.imshow('OPENCV - depth', 0.5* depth)
+
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
     
+    for i in range(1,8): 
+        if cv.waitKey(1) == ord(str(i)):
+            last_input = i
+    print("Input: {}".format(last_input))
+
     # put new sphere on table if needed
     if robo_program.need_new_sphere:
         # this does not move sphere
@@ -159,7 +169,10 @@ for t in range(10000):
         # ------------------------
 
         robo_program.need_new_sphere = waiting_for_input
-        
+    
+    if last_input is not None:
+        robo_program.drop_spot = last_input
+    
     # do state update
     robo_program.step()
 

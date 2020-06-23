@@ -99,3 +99,49 @@ class MonteCarloStrategy(Strategy):
             column = columns_free[index]
             Strategy.insert(self, column)
         return column
+
+
+class MinMaxStrategy(Strategy):
+
+    def min_max(self, grid, depth, player, is_maximizing):
+        if player == 1:
+            other_player = 2
+        else:
+            other_player = 1
+        if depth <= 0:
+            return 0
+        w = grid.won()
+        if w is not None:
+            if w == self.player:
+                return depth
+            else:
+                return -depth
+        if is_maximizing:
+            best_value = 1
+        else:
+            best_value = -1
+        for c in grid.free_columns():
+            grid.insert(c, player)
+            value = self.min_max(deepcopy(grid), depth-1, other_player, not is_maximizing)
+            if is_maximizing:
+                best_value = max(best_value, value)
+            else:
+                best_value = min(best_value, value)
+        return best_value
+
+    def insert(self):
+        column = None
+        columns_free = self.grid.free_columns()
+        if len(columns_free):
+            scores = [-10000] * len(self.grid.grid)
+            for i in columns_free:
+                grid = deepcopy(self.grid)
+                grid.insert(i, self.player)
+                if self.player == 1:
+                    player = 2
+                else:
+                    player = 1
+                scores[i] = self.min_max(grid, 5, player, False)
+            column = scores.index(max(scores))
+            Strategy.insert(self, column)
+        return column

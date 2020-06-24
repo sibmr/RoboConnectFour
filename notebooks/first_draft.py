@@ -132,7 +132,6 @@ robo_program = RobotConnectFourProgram(robo)
 waiting_for_input = 0
 last_input = [-1]
 game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input))
-previous_step_player = game.player_1
 
 for t in range(10000):
 
@@ -182,8 +181,6 @@ for t in range(10000):
             robo_program.sphere_id += 1
             robo_program.need_new_sphere = False
             waiting_for_input = 200
-        
-        previous_step_player = game.player
         # ------------------------
     
     # keep setting drop pos to current user input

@@ -120,11 +120,18 @@ V.setConfiguration(C)
 sys.path.append('../')
 from robot import Robot
 from robot_state_machine import RobotConnectFourProgram
+from game import Game
+from strategy import MonteCarloStrategy, get_asynch_human_strategy
+
+# -------------------------------------------------------------
 
 robo = Robot(0.015, C, V, S, ry)
 robo_program = RobotConnectFourProgram(robo)
 
-waiting_for_input = False
+# variables for handling game state and asynchronous user input
+waiting_for_input = 0
+last_input = [-1]
+game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input))
 
 for t in range(10000):
 
@@ -132,7 +139,8 @@ for t in range(10000):
     if t%10 == 0:
         [rgb, depth] = S.getImageAndDepth()
         points = S.depthData2pointCloud(depth, fxfypxpy)
-       
+        bgr = cv.cvtColor(rgb,cv.COLOR_RGB2BGR)
+
         # skipping perception
         for i in range(len(sim_spheres)-1):
             p_obj = sim_spheres[i].getPosition()   
@@ -140,26 +148,45 @@ for t in range(10000):
             perceived_spheres[i].setPosition(p_obj)
             perceived_spheres[i].setQuaternion(r_obj)
 
-        V.recopyMeshes(C)
-        V.setConfiguration(C)
+        if len(rgb)>0: cv.imshow('OPENCV - rgb', bgr)
+        if len(depth)>0: cv.imshow('OPENCV - depth', 0.5* depth)
+
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
     
+    # look for user input
+    for i in range(1,8): 
+        if cv.waitKey(1) == ord(str(i)):
+            last_input[0] = i
+    print("Input: {}".format(last_input))
+
+    # give the program new sphere id and drop position if needed
     # put new sphere on table if needed
+    print("waiting for input {}".format(waiting_for_input))
     if robo_program.need_new_sphere:
         # this does not move sphere
         # TODO find out how to move sphere in sim
         sim_spheres[robo_program.sphere_id].setPosition([0,-0.2,0.8])
         
-        # TODO do something here for the ai
+        # step the ai - wait for input on the humans turn
         # ------------------------
-        if not waiting_for_input:
-            robo_program.drop_spot = 5
-            robo_program.sphere_id += 1
-        if robo_program.sphere_id == 10: # TODO use other condition
-            waiting_for_input = True
-        # ------------------------
-
-        robo_program.need_new_sphere = waiting_for_input
+        if game.player == game.player_2:
+            waiting_for_input -= 1
         
+        if waiting_for_input == 0 or game.player == game.player_1:
+            # strategy from game object
+            robo_program.drop_spot = game.step()
+            # constant strategy
+            #robo_program.drop_spot = 5
+            robo_program.sphere_id += 1
+            robo_program.need_new_sphere = False
+            waiting_for_input = 200
+        # ------------------------
+    
+    # keep setting drop pos to current user input
+    #if last_input is not None:
+    #    robo_program.drop_spot = last_input
+    
     # do state update
     robo_program.step()
 

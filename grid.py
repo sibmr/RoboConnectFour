@@ -1,18 +1,31 @@
 import numpy as np
 
+
 class Grid:
 
     def __init__(self):
         self.kGridWidth = 7
         self.kGridHeight = 6
         self.grid = np.zeros((self.kGridWidth, self.kGridHeight), dtype=np.uint8)
+        self.counter = 0
+        self.log = []
 
     def insert(self, column: int, player: int):
         assert(column >= 0), "Negative column not allowed"
         assert(column < self.kGridWidth), "Column number greater than grid size"
         assert(self.grid[column][-1] == 0), "Column already full"
         idx_lst = np.where(self.grid[column]==0)
-        self.grid[column][idx_lst[0][0]] = player
+        row = idx_lst[0][0]
+        self.grid[column][row] = player
+        self.log.append([column, row])
+        self.counter += 1
+
+    def free_columns(self):
+        free = []
+        for i, col in enumerate(self.grid):
+            if col[-1] == 0:
+                free.append(i)
+        return free
 
     def print(self):
         for row in self.grid.transpose()[::-1]:
@@ -50,7 +63,8 @@ class Grid:
                 else:
                     counter_v += 1
         if counter_v >= 4:
-            return cell_player
+            #print("Won vertical")
+            return player
 
         # Horizontal
         counter_h = 0
@@ -65,7 +79,8 @@ class Grid:
                 else:
                     counter_h += 1
         if counter_h >= 4:
-            return cell_player
+            #print("Won horizontal")
+            return player
 
         # Diagonal bottom left
         counter_d1 = 0
@@ -80,7 +95,8 @@ class Grid:
                 else:
                     counter_d1 += 1
         if counter_d1 >= 4:
-            return cell_player  
+            #print("Won diagonal bottom left")
+            return player
 
         # Diagonal top left
         counter_d2 = 0
@@ -95,19 +111,17 @@ class Grid:
                 else:
                     counter_d2 += 1
         if counter_d2 >= 4:
-            return cell_player
+            #print("Won diagonal top left")
+            return player
 
 
 if __name__ == "__main__":
     g = Grid()
-    g.insert(0, player=1)
-    g.insert(1, player=1)
-    g.insert(1, player=1)
 
     for i in range(0,4):
-        g.insert(2, player=1)
         g.insert(3, player=1)
     g.print()
     print(g.won())
+    print(g.check_cell(3,0))
         
 

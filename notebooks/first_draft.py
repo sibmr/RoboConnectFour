@@ -121,11 +121,11 @@ sys.path.append('../')
 from robot import Robot
 from robot_state_machine import RobotConnectFourProgram
 from game import Game
-from strategy import RandomStrategy
+from strategy import MonteCarloStrategy, HumanStrategy
 
 robo = Robot(0.015, C, V, S, ry)
 robo_program = RobotConnectFourProgram(robo)
-game = Game(RandomStrategy, RandomStrategy)
+game = Game(MonteCarloStrategy, HumanStrategy)
 
 waiting_for_input = False
 last_input = None

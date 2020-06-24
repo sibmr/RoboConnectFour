@@ -49,6 +49,28 @@ class HumanStrategy(Strategy):
             Strategy.insert(self, column)
         return column
 
+def get_asynch_human_strategy(input_object):
+    class AsynchHumanStrategy(Strategy):
+
+        def insert(self):
+            column = None
+            columns_free = self.grid.free_columns()
+            if len(columns_free):
+                while column is None:
+                    ans = input_object[0]
+                    try:
+                        column = int(ans)
+                        if column not in columns_free:
+                            column = None
+                            raise IndexError
+                    except ValueError:
+                        print("No valid integer, please try again: ", end='')
+                    except IndexError:
+                        print("Column not available, please try again: ", end='')
+                Strategy.insert(self, column)
+            return column
+    return AsynchHumanStrategy
+
 
 class MonteCarloStrategy(Strategy):
 

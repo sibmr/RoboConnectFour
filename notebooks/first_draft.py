@@ -120,9 +120,12 @@ V.setConfiguration(C)
 sys.path.append('../')
 from robot import Robot
 from robot_state_machine import RobotConnectFourProgram
+from game import Game
+from strategy import RandomStrategy
 
 robo = Robot(0.015, C, V, S, ry)
 robo_program = RobotConnectFourProgram(robo)
+game = Game(RandomStrategy, RandomStrategy)
 
 waiting_for_input = False
 last_input = None
@@ -162,6 +165,7 @@ for t in range(10000):
         # TODO do something here for the ai
         # ------------------------
         if not waiting_for_input:
+            # robo_program.drop_spot = game.step()
             robo_program.drop_spot = 5
             robo_program.sphere_id += 1
         if robo_program.sphere_id == 10: # TODO use other condition

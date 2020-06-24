@@ -19,19 +19,25 @@ class Game:
             self.player = self.player_1
 
     def play(self):
-        while True:
-            self.grid.print()
-            print("Player " + str(self.player.player) + "'s Turn: ", end='')
-            column = self.player.insert()
-            print(str(column))
-            if column is None:
-                print("*** Draw ***")
-                break
-            if self.grid.won() is not None:
-                print("*** Player " + str(self.grid.won()) + " won ***")
-                break
-            self.turn()
+        column = 0
+        while column is not None:
+            column = self.step()
         self.grid.print()
+
+    def step(self):
+        self.grid.print()
+        print("Player " + str(self.player.player) + "'s Turn: ", end='')
+        column = self.player.insert()
+        print(str(column))
+        if column is None:
+            print("*** Draw ***")
+            return None
+        if self.grid.won() is not None:
+            print("*** Player " + str(self.grid.won()) + " won ***")
+            return None
+        self.turn()
+        return column
+
 
 
 if __name__ == "__main__":

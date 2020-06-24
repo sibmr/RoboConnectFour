@@ -1,5 +1,4 @@
 from grid import Grid
-import strategy
 
 
 class Game:
@@ -41,5 +40,6 @@ class Game:
 
 
 if __name__ == "__main__":
+    import strategy
     game = Game(strategy.MinMaxStrategy, strategy.MonteCarloStrategy)
     game.play()

@@ -165,8 +165,10 @@ for t in range(10000):
         # TODO do something here for the ai
         # ------------------------
         if not waiting_for_input:
-            # robo_program.drop_spot = game.step()
-            robo_program.drop_spot = 5
+            # strategy from game function
+            robo_program.drop_spot = game.step()
+            # constant strategy
+            #robo_program.drop_spot = 5
             robo_program.sphere_id += 1
         if robo_program.sphere_id == 10: # TODO use other condition
             waiting_for_input = True
@@ -174,8 +176,9 @@ for t in range(10000):
 
         robo_program.need_new_sphere = waiting_for_input
     
-    if last_input is not None:
-        robo_program.drop_spot = last_input
+    # keep setting drop pos to current user input
+    #if last_input is not None:
+    #    robo_program.drop_spot = last_input
     
     # do state update
     robo_program.step()

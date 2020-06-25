@@ -26,13 +26,13 @@ class Game:
     def step(self):
         self.grid.print()
         print("Player " + str(self.player.player) + "'s Turn: ", end='')
+        if self.grid.won() is not None:
+            print("*** Player " + str(self.grid.won()) + " won ***")
+            return None
         column = self.player.insert()
         print(str(column))
         if column is None:
             print("*** Draw ***")
-            return None
-        if self.grid.won() is not None:
-            print("*** Player " + str(self.grid.won()) + " won ***")
             return None
         self.turn()
         return column

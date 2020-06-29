@@ -74,10 +74,10 @@ class Robot(object):
         if diff > 2*stepsize:
             normdiff = diff/np.linalg.norm(diff)
             pos[2] = pos[2] + normdiff*stepsize
-            self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1])
+            self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0])
         else:
             pos[2] = z
-            return self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1]) 
+            return self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0]) 
 
     def move_gripper_to_pos(self, gripper, pos, align_vec_z=None, align_vec_y=None, rel_to_object=None):
         """
@@ -129,7 +129,7 @@ class Robot(object):
         # When exiting the loop getGripperIsGrasping is true, so the closing progress is finished
         self.is_closing = False
 
-    def grasp(self, gripper, obj, align_vec_z = None):
+    def grasp(self, gripper, obj, align_vec_z = None, align_vec_y = None):
         """
         gripper:    gripper that will be grasping
         obj:        object that will be grasped
@@ -150,7 +150,7 @@ class Robot(object):
             self.is_closing = True # Avoid that closeGripper() is called multiple times
         
         self.optimization_objective.clear()
-        self.optimization_objective.grasp(gripper, obj, align_vec_z = align_vec_z)
+        self.optimization_objective.grasp(gripper, obj, align_vec_z = align_vec_z, align_vec_y=align_vec_y)
         q = self.optimize_and_update()
         self.step_simulation(q)
         # When exiting the loop getGripperIsGrasping is true, so the closing progress is finished
@@ -175,11 +175,12 @@ class Robot(object):
 
     def go_to_init_q(self, threshold=1):
 
+        self.optimization_objective.clear()
+
         dist = np.linalg.norm(self.init_q-self.S.get_q())
         if dist < threshold:
             return True 
-
-        self.optimization_objective.clear()
+        
         self.optimization_objective.go_to_q(self.init_q)
         q = self.optimize_and_update()
         self.step_simulation(q)

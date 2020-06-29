@@ -130,7 +130,7 @@ robo_program = RobotConnectFourProgram(robo)
 
 # variables for handling game state and asynchronous user input
 waiting_for_input = 0
-last_input = [-1]
+last_input = [6]
 game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input))
 
 for t in range(10000):
@@ -165,8 +165,10 @@ for t in range(10000):
     print("waiting for input {}".format(waiting_for_input))
     if robo_program.need_new_sphere:
         # this does not move sphere
-        # TODO find out how to move sphere in sim
-        sim_spheres[robo_program.sphere_id].setPosition([0,-0.2,0.8])
+        
+        # after next S.set state this should teleport a sphere
+        sim_spheres[robo_program.sphere_id+11].setPosition([1.2,0,0.8])
+        S.setState(RealWorld.getFrameState())
         
         # step the ai - wait for input on the humans turn
         # ------------------------

@@ -47,8 +47,8 @@ class OptimizationObjective(object):
         #self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [3e1])
         finger1 = "{}_finger1".format(gripper[0])
         finger2 = "{}_finger2".format(gripper[0])
-        self.komo.addObjective([], ry.FS.qItself, [finger1], ry.OT.eq, [1e2], order=1)
-        self.komo.addObjective([], ry.FS.qItself, [finger2], ry.OT.eq, [1e2], order=1)
+        self.komo.addObjective([], ry.FS.qItself, [finger1], ry.OT.eq, [3e1], order=1)
+        self.komo.addObjective([], ry.FS.qItself, [finger2], ry.OT.eq, [3e1], order=1)
         self.komo.addObjective([], ry.FS.distance, [finger1, finger2], ry.OT.sos, [1e3], target=[0.1])
             
     def go_to_object(self, gripper, obj):

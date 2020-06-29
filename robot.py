@@ -88,6 +88,8 @@ class Robot(object):
         """
         print("Move")
         
+        self.optimization_objective.clear()
+
         obj_pos = np.array([0,0,0])
         if rel_to_object:
             obj_pos, _ = self.C.evalFeature(self.ry.FS.position, [rel_to_object])
@@ -102,7 +104,6 @@ class Robot(object):
         if np.linalg.norm(diff) < 0.03: #np.abs(y).max() < 1e-2:
             return True
         
-        self.optimization_objective.clear()
         self.optimization_objective.move_to_position(gripper, obj_pos + pos, align_vec_z=align_vec_z, align_vec_y=align_vec_y)
         q = self.optimize_and_update()
         self.step_simulation(q)
@@ -138,6 +139,9 @@ class Robot(object):
         """
         print("Grasp")
         # The high-level grasp task is only finished when the simulation yields getGripperIsGrasping == True
+        
+        self.optimization_objective.clear()
+
         if self.S.getGripperIsGrasping(gripper):
             self.is_closing = False 
             return True
@@ -149,7 +153,6 @@ class Robot(object):
             self.S.closeGripper(gripper, speed=2.0)
             self.is_closing = True # Avoid that closeGripper() is called multiple times
         
-        self.optimization_objective.clear()
         self.optimization_objective.grasp(gripper, obj, align_vec_z = align_vec_z, align_vec_y=align_vec_y)
         q = self.optimize_and_update()
         self.step_simulation(q)
@@ -164,6 +167,7 @@ class Robot(object):
                     else return integer indicating status of behavior or behavior termination
                     in this case 1 indicates termination
         """
+        self.optimization_objective.clear()
         print("Open")
         self.S.openGripper(gripper)
         self.gripper_open_delay += 1
@@ -193,13 +197,15 @@ class Robot(object):
         return self.S.getGripperWidth("R_gripper") < self.gripper_width_threshold
 
     def go_to_handover(self):
+        
+        self.optimization_objective.clear()
+
         y, _ = self.evaluate_dist("R_gripperCenter", "L_gripperCenter")
         
         dist = np.linalg.norm(y)
         if dist < 0.02:
             return True
-
-        self.optimization_objective.clear()
+        
         self.optimization_objective.go_to_handover(alignment_prio=4e2*(0.04/dist))
         q = self.optimize_and_update()
         self.step_simulation(q)

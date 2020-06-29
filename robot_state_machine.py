@@ -11,6 +11,11 @@ class RobotState(Enum):
     going_to_init_q = 7
     idle = 8
     move_above_object = 9
+    go_to_handover = 10
+    receive = 11
+    release = 12
+    goto_q_before_handover = 13
+
 
 class RobotStateMachine(object):
     """
@@ -91,15 +96,17 @@ class RobotConnectFourProgram(RobotStateMachine):
         self.drop_spot = 0
         self.max_spheres = 24
         self.drop_pos =     [
-                            [-0.20, -0.04, 1.2],
-                            [-0.14, -0.04, 1.2],
-                            [-0.07, -0.04, 1.2],
-                            [ 0.00, -0.04, 1.2],
-                            [ 0.07, -0.04, 1.2],
-                            [ 0.14, -0.04, 1.2],
-                            [ 0.20, -0.04, 1.2]
+                            [-0.21, -0.14, 1.2],
+                            [-0.14, -0.14, 1.2],
+                            [-0.07, -0.14, 1.2],
+                            [ 0.00, -0.14, 1.2],
+                            [ 0.07, -0.14, 1.2],
+                            [ 0.14, -0.14, 1.2],
+                            [ 0.21, -0.14, 1.2]
                             ]
         self.need_new_sphere = True
+        self.receiving_gripper = "L_gripper"
+        self.gripper_with_sphere = "R_gripper"
 
     def step(self):
         # initq -> move above object -> grasp -> lift -> align_pos -> drop -> initq
@@ -110,28 +117,49 @@ class RobotConnectFourProgram(RobotStateMachine):
                 self.robot.go_to_init_q()
         elif self.RSTATE == RobotState.move_above_object:
             sphere_name = "sphere{}".format(self.sphere_id)
-            finish = self.robot.move_gripper_to_pos("R_gripper", pos=[0,0,0.3], align_vec_z = [0,0,1], rel_to_object=sphere_name)
+            finish = self.robot.move_gripper_to_pos(self.gripper_with_sphere, pos=[0,0,0.3], align_vec_z = [0,0,1], align_vec_y = [-1,0,0], rel_to_object=sphere_name)
             if finish:
                 self.RSTATE = RobotState.grasp
         elif self.RSTATE == RobotState.grasp:
-            finish = self.robot.grasp("R_gripper", "sphere{}".format(self.sphere_id))
+            finish = self.robot.grasp(self.gripper_with_sphere, "sphere{}".format(self.sphere_id), align_vec_z=[0,0,1])
             if finish:
                 self.RSTATE = RobotState.lift
         elif self.RSTATE == RobotState.lift:
             pos = self.drop_pos[self.drop_spot]
-            finish = self.robot.lift_gripper_to_z("R_gripper", z=pos[2]+0.0)
+            finish = self.robot.lift_gripper_to_z(self.gripper_with_sphere, z=pos[2]+0.0)
             if finish:
-                self.RSTATE = RobotState.align_pos
+                self.RSTATE = RobotState.goto_q_before_handover
         elif self.RSTATE == RobotState.align_pos:
             pos = self.drop_pos[self.drop_spot]
-            finish = self.robot.move_gripper_to_pos("R_gripper", pos=pos, align_vec_z = [0,0,1])
+            finish = self.robot.move_gripper_to_pos(self.gripper_with_sphere, pos=pos, align_vec_z = [0,0,1], align_vec_y=[-1,0,0])
             print("align pos")
             print(self.sphere_id)
             if finish:
                 self.need_new_sphere = True
+                self.gripper_with_sphere, self.receiving_gripper = self.receiving_gripper, self.gripper_with_sphere
                 self.RSTATE = RobotState.drop
         elif self.RSTATE == RobotState.drop:
-            finish = self.robot.delayed_open_gripper("R_gripper", delay=100)
+            finish = self.robot.delayed_open_gripper(self.gripper_with_sphere, delay=100)
             if finish:
                 self.RSTATE = RobotState.going_to_init_q
-        
+        # ------------------------------------------------------------------------------
+        # handover states
+        elif self.RSTATE == RobotState.goto_q_before_handover:
+            finish = self.robot.go_to_init_q()
+            if finish:
+                self.RSTATE = RobotState.go_to_handover
+        elif self.RSTATE == RobotState.go_to_handover:
+            finish = self.robot.go_to_handover()
+            if finish:
+                self.RSTATE = RobotState.receive
+        elif self.RSTATE == RobotState.receive:
+            sphere_name = "sphere{}".format(self.sphere_id)
+            finish = self.robot.grasp(self.receiving_gripper, sphere_name)
+            if finish:
+                self.RSTATE = RobotState.release
+        elif self.RSTATE == RobotState.release:
+            finish = self.robot.delayed_open_gripper(self.gripper_with_sphere, delay=100)
+            if finish:
+                self.gripper_with_sphere, self.receiving_gripper = self.receiving_gripper, self.gripper_with_sphere
+                self.RSTATE = RobotState.align_pos
+        # ------------------------------------------------------------------------------

@@ -79,7 +79,7 @@ class Robot(object):
             pos[2] = z
             return self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1]) 
 
-    def move_gripper_to_pos(self, gripper, pos, align_vec_z=None, rel_to_object=None):
+    def move_gripper_to_pos(self, gripper, pos, align_vec_z=None, align_vec_y=None, rel_to_object=None):
         """
         gripper:    gripper that will be moved
         pos:        position to move the gripper to
@@ -103,7 +103,7 @@ class Robot(object):
             return True
         
         self.optimization_objective.clear()
-        self.optimization_objective.move_to_position(gripper, obj_pos + pos, align_vec_z=align_vec_z)
+        self.optimization_objective.move_to_position(gripper, obj_pos + pos, align_vec_z=align_vec_z, align_vec_y=align_vec_y)
         q = self.optimize_and_update()
         self.step_simulation(q)
         return False
@@ -129,7 +129,7 @@ class Robot(object):
         # When exiting the loop getGripperIsGrasping is true, so the closing progress is finished
         self.is_closing = False
 
-    def grasp(self, gripper, obj):
+    def grasp(self, gripper, obj, align_vec_z = None):
         """
         gripper:    gripper that will be grasping
         obj:        object that will be grasped
@@ -150,7 +150,7 @@ class Robot(object):
             self.is_closing = True # Avoid that closeGripper() is called multiple times
         
         self.optimization_objective.clear()
-        self.optimization_objective.grasp(gripper, obj)
+        self.optimization_objective.grasp(gripper, obj, align_vec_z = align_vec_z)
         q = self.optimize_and_update()
         self.step_simulation(q)
         # When exiting the loop getGripperIsGrasping is true, so the closing progress is finished
@@ -165,7 +165,7 @@ class Robot(object):
                     in this case 1 indicates termination
         """
         print("Open")
-        self.S.openGripper("R_gripper")
+        self.S.openGripper(gripper)
         self.gripper_open_delay += 1
         self.step_simulation()
         if self.gripper_open_delay == delay:
@@ -173,7 +173,12 @@ class Robot(object):
             return True
         return False
 
-    def go_to_init_q(self):
+    def go_to_init_q(self, threshold=1):
+
+        dist = np.linalg.norm(self.init_q-self.S.get_q())
+        if dist < threshold:
+            return True 
+
         self.optimization_objective.clear()
         self.optimization_objective.go_to_q(self.init_q)
         q = self.optimize_and_update()
@@ -186,4 +191,17 @@ class Robot(object):
             self.opening = True
         return self.S.getGripperWidth("R_gripper") < self.gripper_width_threshold
 
-    
+    def go_to_handover(self):
+        y, _ = self.evaluate_dist("R_gripperCenter", "L_gripperCenter")
+        
+        dist = np.linalg.norm(y)
+        if dist < 0.02:
+            return True
+
+        self.optimization_objective.clear()
+        self.optimization_objective.go_to_handover(alignment_prio=4e2*(0.04/dist))
+        q = self.optimize_and_update()
+        self.step_simulation(q)
+
+        return False
+        

@@ -155,7 +155,7 @@ for t in range(10000):
             break
     
     # look for user input
-    for i in range(1,8): 
+    for i in range(0,7): 
         if cv.waitKey(1) == ord(str(i)):
             last_input[0] = i
     print("Input: {}".format(last_input))

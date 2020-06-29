@@ -71,8 +71,8 @@ class OptimizationObjective(object):
         self.komo.addObjective([1.], ry.FS.position, [gripper + "Center"], ry.OT.sos, [1e3], target=pos)
         self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [1.5e1], order=1)
         #self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [3e1]);
-        self.komo.addObjective([], ry.FS.qItself, ["R_finger1"], ry.OT.eq, [1e1], order=1)
-        self.komo.addObjective([], ry.FS.qItself, ["R_finger2"], ry.OT.eq, [1e1], order=1)
+        self.komo.addObjective([], ry.FS.qItself, ["R_finger1"], ry.OT.eq, [1e2], order=1)
+        self.komo.addObjective([], ry.FS.qItself, ["R_finger2"], ry.OT.eq, [1e2], order=1)
     
     def go_to_q(self, q):
         """

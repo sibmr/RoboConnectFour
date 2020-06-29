@@ -96,13 +96,13 @@ class RobotConnectFourProgram(RobotStateMachine):
         self.drop_spot = 0
         self.max_spheres = 24
         self.drop_pos =     [
-                            [-0.21, -0.04, 1.2],
-                            [-0.14, -0.04, 1.2],
-                            [-0.07, -0.04, 1.2],
-                            [ 0.00, -0.04, 1.2],
-                            [ 0.07, -0.04, 1.2],
-                            [ 0.14, -0.04, 1.2],
-                            [ 0.21, -0.04, 1.2]
+                            [-0.205,-0.05, 1.2],
+                            [-0.137,-0.05, 1.2],
+                            [-0.07, -0.05, 1.2],
+                            [ 0.00, -0.05, 1.2],
+                            [ 0.07, -0.05, 1.2],
+                            [ 0.137,-0.05, 1.2],
+                            [ 0.205,-0.05, 1.2]
                             ]
         self.need_new_sphere = True
         self.receiving_gripper = "L_gripper"

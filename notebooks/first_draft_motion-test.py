@@ -12,7 +12,9 @@ print(cv.__version__)
 connect_4_model_file = "../models/connect_4_6x7_simple.g"
 connect_4_sphere_file = "../models/connect_4_balls_simple.g"
 ball_ramp_file = "../models/ball_ramp_conv.g"
+fence_file = "../models/connect_4_fence.g"
 pandas_model_file = '../../robotics-course/scenarios/pandasTable.g'
+scene_file = "../models/connect_4_scenario.g"
 
 # In[2]
 
@@ -22,10 +24,12 @@ pandas_model_file = '../../robotics-course/scenarios/pandasTable.g'
 
 #Let's edit the real world before we create the simulation
 RealWorld = ry.Config()
-RealWorld.addFile(pandas_model_file)
-RealWorld.addFile(connect_4_model_file)
-RealWorld.addFile(connect_4_sphere_file)
-RealWorld.addFile(ball_ramp_file)
+#RealWorld.addFile(pandas_model_file)
+#RealWorld.addFile(connect_4_model_file)
+#RealWorld.addFile(connect_4_sphere_file)
+#RealWorld.addFile(ball_ramp_file)
+#RealWorld.addFile(fence_file)
+RealWorld.addFile(scene_file)
 V = ry.ConfigurationViewer()
 V.setConfiguration(RealWorld)
 
@@ -70,9 +74,11 @@ S.addSensor("camera")
 
 # create your model world
 C = ry.Config()
-C.addFile(pandas_model_file)
-C.addFile(connect_4_model_file)
-C.addFile(ball_ramp_file)
+#C.addFile(pandas_model_file)
+#C.addFile(connect_4_model_file)
+#C.addFile(ball_ramp_file)
+#C.addFile(fence_file)
+C.addFile(scene_file)
 #V = ry.ConfigurationViewer()
 V.setConfiguration(C)
 cameraFrame = C.frame("camera")
@@ -101,9 +107,8 @@ for i in range(1,6):
 
 perceived_spheres =[]
 for i in range(1,len(sim_spheres)):
-    sphere = C.addFrame("sphere{}".format(i))
-    sphere.setShape(ry.ST.sphere, [.022])
-    sphere.setColor([0,0,1])
+    sphere = C.getFrame("sphere{}".format(i))
+    #sphere.setShape(ry.ST.sphere, [.022])
     sphere.setContact(1)
     sphere.setPosition([0,0,10+i])
     perceived_spheres.append(sphere)

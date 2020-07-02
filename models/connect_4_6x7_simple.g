@@ -26,3 +26,14 @@ frame connect4_coll11(connect4) 	{  shape:mesh  color:[ 0.9 0.9 0.9 1 ]    pose=
 #spherea2 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.07, -0.05, 1.2, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
 #spherea1 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.137, -0.05, 1.2, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2} 
 #spherea0		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.205,-0.05, 1.2, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+
+#spherea00		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.205,-0.05, .85, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+#spherea20 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.07, -0.05, .85, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+#spherea21 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.07, -0.05, .95, 0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+#spherea30 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.00, -0.05, .85, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+#spherea31 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.00, -0.05, .95, 0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+#spherea32 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.00, -0.05, 1.05, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+#spherea33 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[ 0.00, -0.05, 1.15, 0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+#spherea60 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-0.205,-0.05, .85, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+#spherea61 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-0.205,-0.05, .95, 0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+#spherea62 		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-0.205,-0.05, 1.05, 0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}

@@ -71,7 +71,7 @@ class Robot(object):
         stepsize = 0.1
         pos, _ = self.C.evalFeature(self.ry.FS.position, [gripper + "Center"])
         diff = z-pos[2]
-        height = 0.8
+        height = z*0.7
         if pos[2]< height:
             normdiff = diff/np.linalg.norm(diff)
             pos[2] = pos[2] + normdiff*stepsize
@@ -79,7 +79,7 @@ class Robot(object):
         else:
             height = 0
             pos[2] = z
-            return self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0], movement_priority=8e3) 
+            return self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0], movement_priority=4e3) 
 
     def move_gripper_to_pos(self, gripper, pos, align_vec_z=None, align_vec_y=None, rel_to_object=None, movement_priority=5e3):
         """

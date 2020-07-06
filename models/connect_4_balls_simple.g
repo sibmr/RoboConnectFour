@@ -41,4 +41,17 @@ sphere39       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[18     ,  0,    0,
 sphere40       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[19     ,  0,    0,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
 sphere41       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[20     ,  0,    0,     0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
 sphere42       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[21     ,  0,    0,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-
+sphere43       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[22     ,  0,    0,     0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+sphere44       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[23     ,  0,    0,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere45       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[24     ,  0,    0,     0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+sphere46      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[25     ,  0,    0,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere47      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[26     ,  0,    0,     0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+sphere48      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[27     ,  0,    0,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere49       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[16     ,  0,    0,     0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+sphere50       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[17     ,  0,    0,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere51       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[18     ,  0,    0,     0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+sphere52       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[19     ,  0,    0,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere53       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[20     ,  0,    0,     0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+sphere54       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[21     ,  0,    0,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere55       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[22     ,  0,    0,     0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+sphere56       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[23     ,  0,    0,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}

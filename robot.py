@@ -74,12 +74,12 @@ class Robot(object):
         if diff > 2*stepsize:
             normdiff = diff/np.linalg.norm(diff)
             pos[2] = pos[2] + normdiff*stepsize
-            self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0], movement_priority=1e3)
+            self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0], movement_priority=2e3)
         else:
             pos[2] = z
-            return self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0], movement_priority=8e2) 
+            return self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0], movement_priority=2e3) 
 
-    def move_gripper_to_pos(self, gripper, pos, align_vec_z=None, align_vec_y=None, rel_to_object=None, movement_priority=3e5):
+    def move_gripper_to_pos(self, gripper, pos, align_vec_z=None, align_vec_y=None, rel_to_object=None, movement_priority=5e3):
         """
         gripper:    gripper that will be moved
         pos:        position to move the gripper to

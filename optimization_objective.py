@@ -63,7 +63,7 @@ class OptimizationObjective(object):
         self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [1e3], order=1)
         self.komo.addObjective([], ry.FS.qItself, ["R_finger1"], ry.OT.eq, [1e1], order=1)
 
-    def move_to_position(self, gripper, pos, align_vec_z = None, align_vec_y=None):
+    def move_to_position(self, gripper, pos, align_vec_z = None, align_vec_y=None, movement_priority=5e3):
         """
         constraints for moving the gripper center of specified gripper to specified position
         """
@@ -74,7 +74,7 @@ class OptimizationObjective(object):
             self.komo.addObjective([1.], ry.FS.vectorY, [gripper+"Center"], ry.OT.sos, [3e3], target=align_vec_y)
             
         self.komo.addObjective([], ry.FS.accumulatedCollisions, [], ry.OT.ineq, [1e3])
-        self.komo.addObjective([1.], ry.FS.position, [gripper + "Center"], ry.OT.sos, [1e4], target=pos)
+        self.komo.addObjective([1.], ry.FS.position, [gripper + "Center"], ry.OT.sos, [movement_priority], target=pos)
         self.komo.addObjective([0.,.1], ry.FS.qItself, [], ry.OT.sos, [5e3], order=1)
         self.komo.addObjective([.9,1.], ry.FS.qItself, [], ry.OT.sos, [5e1], order=1)
         #self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [3e1]);

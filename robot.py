@@ -74,12 +74,12 @@ class Robot(object):
         if diff > 2*stepsize:
             normdiff = diff/np.linalg.norm(diff)
             pos[2] = pos[2] + normdiff*stepsize
-            self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0])
+            self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0], movement_priority=1e3)
         else:
             pos[2] = z
-            return self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0]) 
+            return self.move_gripper_to_pos(gripper, pos=pos, align_vec_z=[0,0,1], align_vec_y=[-1,0,0], movement_priority=8e2) 
 
-    def move_gripper_to_pos(self, gripper, pos, align_vec_z=None, align_vec_y=None, rel_to_object=None):
+    def move_gripper_to_pos(self, gripper, pos, align_vec_z=None, align_vec_y=None, rel_to_object=None, movement_priority=3e5):
         """
         gripper:    gripper that will be moved
         pos:        position to move the gripper to
@@ -101,10 +101,10 @@ class Robot(object):
         # TODO decide between np.linalg.norm(y) and np.abs(y).max()
         print("norm", str(np.linalg.norm(diff)))
         print("max", str(np.abs(diff).max()))
-        if np.linalg.norm(diff) < 0.008: #np.abs(y).max() < 1e-2:
+        if np.linalg.norm(diff) < 0.01: #np.abs(y).max() < 1e-2:
             return True
         
-        self.optimization_objective.move_to_position(gripper, obj_pos + pos, align_vec_z=align_vec_z, align_vec_y=align_vec_y)
+        self.optimization_objective.move_to_position(gripper, obj_pos + pos, align_vec_z=align_vec_z, align_vec_y=align_vec_y, movement_priority=movement_priority)
         q = self.optimize_and_update()
         self.step_simulation(q)
         return False

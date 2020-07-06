@@ -4,8 +4,8 @@ import numpy as np
 class Perception(object):
     # for segmentation
     depth_background = None
-    bgr_background = None
-    bgr_background_blur = None
+    rgb_background = None
+    rgb_background_blur = None
     
     blur = None
     
@@ -13,22 +13,23 @@ class Perception(object):
     vel = 0
     prev_pos = None
     
-    def __init__(self):
-        self.blur = (lambda img : cv.GaussianBlur(img, (0,0), 0.6,0.6))
+    def __init__(self, f):
+        self.f = f
+        #self.blur = (lambda img : cv.GaussianBlur(img, (0,0), 0.6,0.6))
        
-    def set_background(self,bgr_background, depth_background):
+    def set_background(self,rgb_background, depth_background):
         self.depth_background = depth_background
-        self.bgr_background = bgr_background
-        self.bgr_background_blur = self.blur(bgr_background)
+        self.rgb_background = rgb_background
+        self.rgb_background_blur = self.blur(rgb_background)
     
-    def set_background_from_sim(self,sim):
-        self.set_background(*sim.getImageAndDepth())
+    #def set_background_from_sim(self,sim):
+    #    self.set_background(*sim.getImageAndDepth())
     
     def get_object_pixels(self,depth):
         cond = (self.depth_background > depth)
         imgray = (cond*255).astype(np.uint8)
         contours, hierarchy = cv.findContours(imgray,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
-        cv.drawContours(bgr, contours, -1, (0,255,0), 3)
+        cv.drawContours(rgb, contours, -1, (0,255,0), 3)
         return imgray
     
     def get_unique_colors(self):
@@ -41,11 +42,11 @@ class Perception(object):
             [0,255,255],
             ])
     
-    def segment_bgr(self,bgr):
+    def segment_rgb(self,rgb):
         opor = np.logical_or
         opand = np.logical_and
         
-        diff = cv.absdiff(self.bgr_background_blur, self.blur(bgr))
+        diff = cv.absdiff(self.rgb_background_blur, self.blur(rgb))
 
         flatb = diff.reshape((360*640,3))[:,0]
         flatg = diff.reshape((360*640,3))[:,1]
@@ -58,28 +59,49 @@ class Perception(object):
         imgray = imgray.reshape(360,640)
 
         contours, hierarchy = cv.findContours(imgray,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
-        cv.drawContours(bgr, contours, -1, (0,255,255), 6)
+        cv.drawContours(rgb, contours, -1, (0,255,255), 6)
 
-        return bgr
+        return rgb
     
-    def segment_by_color(self,bgr,mask_bgr):
-        hsv = cv.cvtColor(bgr, cv.COLOR_BGR2HSV)
-        mask_hsv = cv.cvtColor(np.uint8([[mask_bgr]]), cv.COLOR_BGR2HSV)[0,0]
-        diff = np.array([10, 80, 80])
+    def segment_color(self, rgb, mask_rgb):
+        hsv = cv.cvtColor(rgb, cv.COLOR_RGB2HSV)
+        mask_hsv = cv.cvtColor(np.uint8([[mask_rgb]]), cv.COLOR_RGB2HSV)[0,0]
+        diff = np.array([30, 100, 100])
         lower = (mask_hsv - diff).clip(min=0)
         upper = (mask_hsv + diff).clip(max=255)
-        #imgray = (cv.inRange(hsv, lower, upper)*255).astype(np.uint8)
+        #imgray = (cv.inRange(hsv, lower, upper).astype(np.uint8))*255
         imgray = (cv.inRange(hsv, lower, upper))
-        
-        contours, hierarchy = cv.findContours(imgray,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
-        bgr = cv.drawContours(bgr, contours, -1, (255,255,0), 3)
         return imgray
+
+    def erode(self, imgray, iterations=5):
+        #imgray = cv.GaussianBlur(imgray, (3,3), 1, 1)
+        kernel = np.ones((3,3),np.uint8)
+        imgray = cv.erode(imgray,kernel,iterations=iterations)
+        contours, hierarchy = cv.findContours(imgray,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
+        center_lst = []
+        for contour in contours:
+            M = cv.moments(contour)
+            center_lst.append([M["m10"] / M["m00"], M["m01"] / M["m00"], 10])
+        #rgb = cv.drawContours(rgb, contours, -1, (255,255,0), 3)
+        return center_lst
+
+    def hough(self, imgray):
+        circles = cv.HoughCircles(imgray,cv.HOUGH_GRADIENT,1,18,
+                            param1=150,param2=10,minRadius=8,maxRadius=15)
+        center_lst = []
+        if circles is not None:
+            center_lst = circles[0]
+        return center_lst
+
+    def draw_circles(self, img, circle_lst, color=(0,255,0)):
+        for i in circle_lst:
+            cv.circle(img,(int(i[0]),int(i[1])),int(i[2]),color,2)
     
     def get_image_coordinates_manual(self, depth, bin_img):
         y, x = np.where(bin_img==255)
         z = depth[y,x]
-        x = (320-x.reshape((len(x),1)))/f
-        y = (180-y.reshape((len(y),1)))/f
+        x = (320-x.reshape((len(x),1)))/self.f
+        y = (180-y.reshape((len(y),1)))/self.f
         z = z.reshape((len(z),1))
         xyz = np.hstack((x,y,z))
         return xyz

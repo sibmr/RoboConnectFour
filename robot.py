@@ -101,7 +101,7 @@ class Robot(object):
         # TODO decide between np.linalg.norm(y) and np.abs(y).max()
         print("norm", str(np.linalg.norm(diff)))
         print("max", str(np.abs(diff).max()))
-        if np.linalg.norm(diff) < 0.03: #np.abs(y).max() < 1e-2:
+        if np.linalg.norm(diff) < 0.008: #np.abs(y).max() < 1e-2:
             return True
         
         self.optimization_objective.move_to_position(gripper, obj_pos + pos, align_vec_z=align_vec_z, align_vec_y=align_vec_y)

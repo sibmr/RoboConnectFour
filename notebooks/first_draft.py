@@ -167,11 +167,8 @@ for t in range(10000):
     # put new sphere on table if needed
     print("waiting for input {}".format(waiting_for_input))
     if robo_program.need_new_sphere:
-        # this does not move sphere
         
-        # after next S.set state this should teleport a sphere
-        sim_spheres[robo_program.sphere_id+11].setPosition([1.2,0,0.8])
-        S.setState(RealWorld.getFrameState())
+        
         
         # step the ai - wait for input on the humans turn
         # ------------------------
@@ -186,6 +183,10 @@ for t in range(10000):
             robo_program.sphere_id += 1
             robo_program.need_new_sphere = False
             waiting_for_input = 200
+
+            # after next S.set state this teleports a sphere
+            sim_spheres[robo_program.sphere_id+10].setPosition([1.2,0,0.8])
+            S.setState(RealWorld.getFrameState())
         # ------------------------
     
     # keep setting drop pos to current user input

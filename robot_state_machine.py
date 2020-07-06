@@ -92,7 +92,7 @@ class RobotConnectFourProgram(RobotStateMachine):
     def __init__(self, robot):
         self.robot = robot
         self.RSTATE = RobotState.going_to_init_q
-        self.sphere_id = 3
+        self.sphere_id = 0
         self.drop_spot = 0
         self.max_spheres = 24
         self.drop_pos =     [

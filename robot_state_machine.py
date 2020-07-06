@@ -136,7 +136,7 @@ class RobotConnectFourProgram(RobotStateMachine):
                     self.RSTATE = RobotState.goto_q_before_handover
         elif self.RSTATE == RobotState.align_pos:
             pos = self.drop_pos[self.drop_spot]
-            finish = self.robot.move_gripper_to_pos(self.gripper_with_sphere, pos=pos, align_vec_z = [0,0,1], align_vec_y=[-1,0,0], alignment_priority=3e2)
+            finish = self.robot.move_gripper_to_pos(self.gripper_with_sphere, pos=pos, align_vec_z = [0,0,1], align_vec_y=[-1,0,0])
             print("align pos")
             print(self.sphere_id)
             if finish:

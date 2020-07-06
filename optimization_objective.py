@@ -69,11 +69,9 @@ class OptimizationObjective(object):
         """
         ry = self.ry
         if align_vec_z:
-            self.komo.addObjective([0,.1], ry.FS.vectorZ, [gripper+"Center"], ry.OT.sos, [alignment_priority], target=align_vec_z)
-            self.komo.addObjective([1.], ry.FS.vectorZ, [gripper+"Center"], ry.OT.sos, [3e3], target=align_vec_z)
+            self.komo.addObjective([1.], ry.FS.vectorZ, [gripper+"Center"], ry.OT.sos, [alignment_priority], target=align_vec_z)
         if align_vec_y:
-            self.komo.addObjective([0,.1], ry.FS.vectorY, [gripper+"Center"], ry.OT.sos, [alignment_priority], target=align_vec_y)
-            self.komo.addObjective([1.], ry.FS.vectorY, [gripper+"Center"], ry.OT.sos, [3e3], target=align_vec_y)
+            self.komo.addObjective([1.], ry.FS.vectorY, [gripper+"Center"], ry.OT.sos, [alignment_priority], target=align_vec_y)
             
         self.komo.addObjective([], ry.FS.accumulatedCollisions, [], ry.OT.ineq, [1e3])
         self.komo.addObjective([1.], ry.FS.position, [gripper + "Center"], ry.OT.sos, [movement_priority], target=pos)

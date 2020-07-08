@@ -195,6 +195,7 @@ for t in range(10000):
         # ------------------------
     
     # keep setting drop pos to current user input
+    # perception is needed for this
     robo_program.drop_spot = last_input[0]
     
     # do state update

@@ -108,6 +108,10 @@ class RobotConnectFourProgram(RobotStateMachine):
         self.receiving_gripper = "L_gripper"
         self.gripper_with_sphere = "R_gripper"
 
+    def set_sphere_id(self, sphere_id):
+        self.sphere_id = sphere_id
+        self.sphere_name = "sphere{}".format(self.sphere_id)
+
     def step(self):
         # initq -> move above object -> grasp -> lift 
         # if drop_spot > 2: -> handover
@@ -118,8 +122,7 @@ class RobotConnectFourProgram(RobotStateMachine):
             else:
                 self.robot.go_to_init_q(threshold=0)
         elif self.RSTATE == RobotState.move_above_object:
-            sphere_name = "sphere{}".format(self.sphere_id)
-            finish = self.robot.move_gripper_to_pos(self.gripper_with_sphere, pos=[0,0,0.3], align_vec_z = [0,0,1], align_vec_y = [-1,0,0], rel_to_object=sphere_name)
+            finish = self.robot.move_gripper_to_pos(self.gripper_with_sphere, pos=[0,0,0.3], align_vec_z = [0,0,1], align_vec_y = [-1,0,0], rel_to_object=self.sphere_name)
             if finish:
                 self.RSTATE = RobotState.grasp
         elif self.RSTATE == RobotState.grasp:
@@ -158,8 +161,7 @@ class RobotConnectFourProgram(RobotStateMachine):
             if finish:
                 self.RSTATE = RobotState.receive
         elif self.RSTATE == RobotState.receive:
-            sphere_name = "sphere{}".format(self.sphere_id)
-            finish = self.robot.grasp(self.receiving_gripper, sphere_name)
+            finish = self.robot.grasp(self.receiving_gripper, self.sphere_name)
             if finish:
                 self.RSTATE = RobotState.release
         elif self.RSTATE == RobotState.release:

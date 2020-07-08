@@ -178,7 +178,9 @@ for t in range(10000):
         
         if waiting_for_input == 0 or game.player == game.player_1:
             # strategy from game object
+            # TODO: perception + game state update here
             action = game.step()
+            # TODO: perception + game state update here also
             if action is None:
                 # Game has been won
                 pass

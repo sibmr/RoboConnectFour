@@ -89,6 +89,9 @@ class RobotIdleProgram(RobotStateMachine):
         self.robot.step_simulation()
 
 class RobotConnectFourProgram(RobotStateMachine):
+    """
+    Class realizing robot behaviour for playing the connect4 game in our environment 
+    """
     def __init__(self, robot):
         self.robot = robot
         self.RSTATE = RobotState.going_to_init_q

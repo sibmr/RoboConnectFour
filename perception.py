@@ -44,16 +44,40 @@ class Perception(object):
         rgb_grid = np.zeros(rgb.shape, dtype=np.uint8)
         rgb_grid[y:y+h,x:x+w] = rgb[y:y+h,x:x+w]
 
-        center_lst_seg_red, center_lst_seg_blue = Perception.extract_circles(rgb_grid)
+        center_lst_red, center_blue_lst = Perception.extract_circles(rgb_grid)
+        grid = Perception.get_grid_state_from_centers(center_lst_red, center_blue_lst, x, y, w, h)
 
         if display:
             if len(rgb)>0:
                 cv.rectangle(rgb,(x,y),(x+w,y+h),(0,255,0),2)
                 cv.imshow('OPENCV - rgb', cv.cvtColor(rgb, cv.COLOR_RGB2BGR))
             if len(rgb)>0:
-                Perception.draw_circles(rgb_grid, center_lst_seg_red, color=(255,0,0))
-                Perception.draw_circles(rgb_grid, center_lst_seg_blue, color= (0,0,255))
+                Perception.draw_circles(rgb_grid, center_lst_red, color=(255,0,0))
+                Perception.draw_circles(rgb_grid, center_blue_lst, color= (0,0,255))
                 cv.imshow('OPENCV - rgb_grid', cv.cvtColor(rgb_grid, cv.COLOR_RGB2BGR))
+
+        return grid
+
+    @staticmethod
+    def calc_cell_from_pixel(center, x, y, w, h, grid_width, grid_height):
+        grid_x = ((center[0] - w*0.05 - x) / (w*0.9) - 1.0/grid_width/2.0) * grid_width
+        grid_x = int(np.round(grid_x))
+        grid_y = ((center[1] - h*0.24 - y) / (h * 0.73) - 1.0/grid_height/2.0) * grid_height
+        grid_y = grid_height - int(np.round(grid_y)) - 1
+        return grid_x, grid_y
+
+    @staticmethod
+    def get_grid_state_from_centers(center_red_lst, center_blue_lst, x, y, w, h):
+        grid_width = 7
+        grid_height = 6
+        grid = np.zeros((grid_width, grid_height), dtype=np.uint8)
+        for center_red in center_red_lst:
+            grid_x, grid_y = Perception.calc_cell_from_pixel(center_red, x, y, w, h, grid_width, grid_height)
+            grid[grid_x, grid_y] = 1
+        for center_blue in center_blue_lst:
+            grid_x, grid_y = Perception.calc_cell_from_pixel(center_blue, x, y, w, h, grid_width, grid_height)
+            grid[grid_x, grid_y] = 2
+        return grid
 
     @staticmethod
     def extract_center_object(depth):

@@ -121,7 +121,7 @@ class Robot(object):
         self.step_simulation(q)
         return False
 
-    def grasp(self, gripper, obj, align_vec_z = None, align_vec_y = None):
+    def grasp(self, gripper, obj=None, align_vec_z = None, align_vec_y = None):
         """
         gripper:    gripper that will be grasping
         obj:        object that will be grasped
@@ -137,16 +137,26 @@ class Robot(object):
             self.is_closing = False 
             return True
         q = self.S.get_q()
-        y, _ = self.evaluate_dist(gripper + "Center", obj)
         # TODO decide between np.linalg.norm(y) and np.abs(y).max()
-        if not self.is_closing and np.linalg.norm(y) < 0.02: #np.abs(y).max() < 1e-2:
-            print("Closing Gripper")
-            self.S.closeGripper(gripper, speed=2.0)
-            self.is_closing = True # Avoid that closeGripper() is called multiple times
-        
-        self.optimization_objective.grasp(gripper, obj, align_vec_z = align_vec_z, align_vec_y=align_vec_y)
-        q = self.optimize_and_update()
-        self.step_simulation(q)
+        if obj is not None:
+            y, _ = self.evaluate_dist(gripper + "Center", obj)
+            if not self.is_closing and np.linalg.norm(y) < 0.02: #np.abs(y).max() < 1e-2:
+                print("Closing Gripper")
+                self.S.closeGripper(gripper, speed=2.0)
+                self.is_closing = True # Avoid that closeGripper() is called multiple times
+        else:
+            if not self.is_closing: #np.abs(y).max() < 1e-2:
+                print("Closing Gripper")
+                self.S.closeGripper(gripper, speed=2.0)
+                self.is_closing = True # Avoid that closeGripper() is called multiple times
+            
+
+        if obj is not None:
+            self.optimization_objective.grasp(gripper, obj, align_vec_z = align_vec_z, align_vec_y=align_vec_y)
+            q = self.optimize_and_update()
+            self.step_simulation(q)
+        else:
+            self.step_simulation(q)
         # When exiting the loop getGripperIsGrasping is true, so the closing progress is finished
         
             

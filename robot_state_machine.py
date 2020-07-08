@@ -157,7 +157,7 @@ class RobotConnectFourProgram(RobotStateMachine):
                 self.need_new_sphere = True
                 self.RSTATE = RobotState.drop
         elif self.RSTATE == RobotState.drop:
-            finish = self.robot.delayed_open_gripper(self.gripper_with_sphere, delay=100)
+            finish = self.robot.delayed_open_gripper(self.gripper_with_sphere, delay=50)
             if finish:
                 self.gripper_with_sphere, self.receiving_gripper = self.receiving_gripper, self.gripper_with_sphere
                 self.RSTATE = RobotState.going_to_init_q
@@ -172,11 +172,11 @@ class RobotConnectFourProgram(RobotStateMachine):
             if finish:
                 self.RSTATE = RobotState.receive
         elif self.RSTATE == RobotState.receive:
-            finish = self.robot.grasp(self.receiving_gripper, self.sphere_name)
+            finish = self.robot.grasp(self.receiving_gripper)#, self.sphere_name)
             if finish:
                 self.RSTATE = RobotState.release
         elif self.RSTATE == RobotState.release:
-            finish = self.robot.delayed_open_gripper(self.gripper_with_sphere, delay=100)
+            finish = self.robot.delayed_open_gripper(self.gripper_with_sphere, delay=50)
             if finish:
                 self.gripper_with_sphere, self.receiving_gripper = self.receiving_gripper, self.gripper_with_sphere
                 self.RSTATE = RobotState.align_pos

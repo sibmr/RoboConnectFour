@@ -115,8 +115,6 @@ for t in range(100):
 sys.path.append('..')
 import perception
 
-p = perception.Perception(f)
-
 points = []
 tau = .01
 gaussian_blur = True
@@ -129,49 +127,12 @@ for t in range(10):
     if t%10 == 0:
         # Prepare image
         [rgb, depth] = S.getImageAndDepth()  #we don't need images with 100Hz, rendering is slow
-        rgb = cv.rotate(rgb, cv.ROTATE_180)
-        depth = cv.rotate(depth, cv.ROTATE_180)
-
-        if gaussian_blur:
-            rgb = cv.GaussianBlur(rgb, (5,5), 1, 1)
-        dim = depth.shape
-        depth_grid = depth[round(dim[0]/2), round(dim[1]/2)]
-        background_rgb = rgb
-        diff_bool = (np.abs(depth-depth_grid) < 1e-7)
-        diff_gray = diff_bool.astype(np.uint8) * 255
-        #diff_gray = cv.GaussianBlur(diff_gray, (3,3), 1, 1)
-
-        contours,hierarchy = cv.findContours(diff_gray, cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
-        contour = max(contours, key = cv.contourArea)
-        x,y,w,h = cv.boundingRect(contour)
-        rgb_grid = np.zeros(rgb.shape,np.uint8)
-        rgb_grid[y:y+h,x:x+w] = rgb[y:y+h,x:x+w]
-        cv.rectangle(rgb,(x,y),(x+w,y+h),(0,255,0),2)
-               
-        img_seg_red = p.segment_color(rgb_grid, [255,0,0])
-        img_seg_blue = p.segment_color(rgb_grid, [0,0,255])
-        center_lst_seg_red = p.erode(img_seg_red)
-        center_lst_seg_blue = p.erode(img_seg_blue)
-        p.draw_circles(rgb_grid, center_lst_seg_red, color=(255,0,0))
-        p.draw_circles(rgb_grid, center_lst_seg_blue, color= (0,0,255))
+        perception.Perception.detect_grid_state(rgb, depth)
 
         points = S.depthData2pointCloud(depth, fxfypxpy)
         cameraFrame.setPointCloud(points, rgb)
         V.recopyMeshes(C)
         V.setConfiguration(C)
-            
-        if len(rgb)>0:
-            cv.imshow('OPENCV - rgb', cv.cvtColor(rgb, cv.COLOR_RGB2BGR))
-        if len(rgb)>0:
-            cv.imshow('OPENCV - rgb_grid', cv.cvtColor(rgb_grid, cv.COLOR_RGB2BGR))
-        if len(depth)>0:
-            cv.imshow('OPENCV - red', img_seg_red)
-        if len(depth)>0:
-            cv.imshow('OPENCV - blue', img_seg_blue)
-        #if len(depth)>0:
-        #    cv.imshow('OPENCV - depth', 0.5* depth)
-        #if len(diff_gray)>0:
-        #    cv.imshow('OPENCV - gray', diff_gray)
 
         if cv.waitKey() & 0xFF == ord('q'):
             break

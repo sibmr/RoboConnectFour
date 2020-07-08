@@ -32,7 +32,9 @@ class OptimizationObjective(object):
         """
         constraints gripping specified object with specified gripper
         
-        gripper:    string which identifies the gripper (R_gripper, L_gripper)
+        gripper:        string which identifies the gripper ("R_gripper", "L_gripper")
+        obj:            string which identifies the target object ("obj0")
+        align_vec_z:    vector 
         """
         ry = self.ry
         self.komo.addObjective([1.], ry.FS.positionDiff, [gripper+"Center",obj], ry.OT.sos, [2e3])

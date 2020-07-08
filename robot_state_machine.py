@@ -95,6 +95,7 @@ class RobotConnectFourProgram(RobotStateMachine):
         self.sphere_id = 0
         self.drop_spot = 0
         self.max_spheres = 24
+        self.pickup_pos = [6.16610706e-01, 3.63965373e-04, 6.93810999e-01]
         self.drop_pos =     [
                             [-0.205,-0.05, 1.2],
                             [-0.137,-0.05, 1.2],

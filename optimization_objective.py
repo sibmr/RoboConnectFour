@@ -93,7 +93,11 @@ class OptimizationObjective(object):
         ry = self.ry
         self.komo.addObjective([], ry.FS.accumulatedCollisions, [], ry.OT.ineq, [1e3])
         self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [5e2], target=q)
-        self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [1e2], order=1)
+        self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [2e1], order=1)
+        self.komo.addObjective([], ry.FS.qItself, ["R_finger1"], ry.OT.eq, [1e2], order=1)
+        self.komo.addObjective([], ry.FS.qItself, ["R_finger2"], ry.OT.eq, [1e2], order=1)
+        self.komo.addObjective([], ry.FS.qItself, ["L_finger1"], ry.OT.eq, [1e2], order=1)
+        self.komo.addObjective([], ry.FS.qItself, ["L_finger2"], ry.OT.eq, [1e2], order=1)
 
     def go_to_handover(self, alignment_prio=2e2):
         ry = self.ry

@@ -111,9 +111,15 @@ class RobotConnectFourProgram(RobotStateMachine):
         self.gripper_with_sphere = "R_gripper"
         self.sphere_name = None
 
-    def set_sphere_id(self, sphere_id):
+    def set_sphere_id(self, sphere_id, mode=1):
         self.sphere_id = sphere_id
-        self.sphere_name = "sphere{}".format(self.sphere_id)
+        if mode == 0:
+            self.sphere_name = "sphere{}".format(self.sphere_id)
+        else:
+            if self.sphere_id % 2 == 1:
+                self.sphere_name = "sphere_red"
+            else:
+                self.sphere_name = "sphere_blue"
 
     def step(self):
         # initq -> move above object -> grasp -> lift 

@@ -13,8 +13,8 @@ connect_4_model_file = "../models/connect_4_6x7_simple.g"
 connect_4_sphere_file = "../models/connect_4_balls_simple.g"
 ball_ramp_file = "../models/ball_ramp_conv.g"
 pandas_model_file = '../../robotics-course/scenarios/pandasTable.g'
-scene_file = '../models/connect_4_scenario.g'
-
+scene_file = '../models/connect_4_scenario_mirror.g'
+ghost_sphere_file = '../models/connect_4_ghost_sphere.g'
 # In[2]
 
 # -------------------------------------------------------------
@@ -48,8 +48,8 @@ for i in range(1,25):
     sphere.setContact(1)
     sim_spheres.append(sphere)
 
-for i in range(1,6):
-    RealWorld.getFrame("ball_ramp{}".format(i)).setContact(1)
+#for i in range(1,6):
+#    RealWorld.getFrame("ball_ramp{}".format(i)).setContact(1)
 
 V.recopyMeshes(RealWorld)
 V.setConfiguration(RealWorld)
@@ -76,6 +76,7 @@ C = ry.Config()
 #C.addFile(connect_4_model_file)
 #C.addFile(ball_ramp_file)
 C.addFile(scene_file)
+C.addFile(ghost_sphere_file)
 #V = ry.ConfigurationViewer()
 V.setConfiguration(C)
 cameraFrame = C.frame("camera")
@@ -99,8 +100,8 @@ points0 = S.depthData2pointCloud(depth0, fxfypxpy)
 for i in range(1,11):
     C.getFrame("connect4_coll{}".format(i)).setContact(1)
 
-for i in range(1,6):
-    C.getFrame("ball_ramp{}".format(i)).setContact(1)
+#for i in range(1,6):
+#    C.getFrame("ball_ramp{}".format(i)).setContact(1)
 
 perceived_spheres =[]
 for i in range(1,len(sim_spheres)):
@@ -177,12 +178,19 @@ for t in range(10000):
         
         if waiting_for_input == 0 or game.player == game.player_1:
             # strategy from game object
-            robo_program.drop_spot = game.step()
+            # TODO: perception + game state update here
+            action = game.step()
+            # TODO: perception + game state update here also
+            if action is None:
+                # Game has been won
+                pass
+            else:
+                robo_program.drop_spot = action
             # constant strategy
             #robo_program.drop_spot = 5
-            robo_program.sphere_id += 1
+            robo_program.set_sphere_id(robo_program.sphere_id + 1)
             robo_program.need_new_sphere = False
-            waiting_for_input = 200
+            waiting_for_input = 150
 
             # after next S.set state this teleports a sphere
             sim_spheres[robo_program.sphere_id+10].setPosition([1.2,0,0.8])
@@ -190,8 +198,8 @@ for t in range(10000):
         # ------------------------
     
     # keep setting drop pos to current user input
-    #if last_input is not None:
-    #    robo_program.drop_spot = last_input
+    # perception is needed for this
+    robo_program.drop_spot = last_input[0]
     
     # do state update
     robo_program.step()

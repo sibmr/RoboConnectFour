@@ -49,6 +49,8 @@ class Robot(object):
         """
         step simulation, 
         optionally with new robot configuration as control sinal
+
+        q:  state in joint space as control signal
         """
         if q is None:
             self.S.step([], self.tau, self.ry.ControlMode.none)
@@ -56,6 +58,9 @@ class Robot(object):
             self.S.step(q, self.tau, self.ry.ControlMode.position)
             
     def evaluate_dist(self, obj1, obj2):
+        """
+        return: vector difference of the positions of obj1 and obj2
+        """
         [y,J] = self.C.evalFeature(self.ry.FS.positionDiff, [obj1, obj2])
         return y, J
 
@@ -116,28 +121,7 @@ class Robot(object):
         self.step_simulation(q)
         return False
 
-    def grasp_old(self, gripper, obj):
-        # TODO: remove ?
-        print("Grasp")
-        # The high-level grasp task is only finished when the simulation yields getGripperIsGrasping == True
-        while not self.S.getGripperIsGrasping(gripper):
-            time.sleep(self.tau)
-            q = self.S.get_q()
-            y, _ = self.evaluate_dist(gripper + "Center", obj)
-            # TODO decide between np.linalg.norm(y) and np.abs(y).max()
-            if not self.is_closing and np.linalg.norm(y) < 0.02: #np.abs(y).max() < 1e-2:
-                print("Closing Gripper")
-                self.S.closeGripper(gripper)
-                self.is_closing = True # Avoid that closeGripper() is called multiple times
-            
-            self.optimization_objective.clear()
-            self.optimization_objective.grasp(gripper, obj)
-            q = self.optimize_and_update()
-            self.step_simulation(q)
-        # When exiting the loop getGripperIsGrasping is true, so the closing progress is finished
-        self.is_closing = False
-
-    def grasp(self, gripper, obj, align_vec_z = None, align_vec_y = None):
+    def grasp(self, gripper, obj=None, align_vec_z = None, align_vec_y = None):
         """
         gripper:    gripper that will be grasping
         obj:        object that will be grasped
@@ -153,16 +137,26 @@ class Robot(object):
             self.is_closing = False 
             return True
         q = self.S.get_q()
-        y, _ = self.evaluate_dist(gripper + "Center", obj)
         # TODO decide between np.linalg.norm(y) and np.abs(y).max()
-        if not self.is_closing and np.linalg.norm(y) < 0.02: #np.abs(y).max() < 1e-2:
-            print("Closing Gripper")
-            self.S.closeGripper(gripper, speed=2.0)
-            self.is_closing = True # Avoid that closeGripper() is called multiple times
-        
-        self.optimization_objective.grasp(gripper, obj, align_vec_z = align_vec_z, align_vec_y=align_vec_y)
-        q = self.optimize_and_update()
-        self.step_simulation(q)
+        if obj is not None:
+            y, _ = self.evaluate_dist(gripper + "Center", obj)
+            if not self.is_closing and np.linalg.norm(y) < 0.02: #np.abs(y).max() < 1e-2:
+                print("Closing Gripper")
+                self.S.closeGripper(gripper, speed=2.0)
+                self.is_closing = True # Avoid that closeGripper() is called multiple times
+        else:
+            if not self.is_closing: #np.abs(y).max() < 1e-2:
+                print("Closing Gripper")
+                self.S.closeGripper(gripper, speed=2.0)
+                self.is_closing = True # Avoid that closeGripper() is called multiple times
+            
+
+        if obj is not None:
+            self.optimization_objective.grasp(gripper, obj, align_vec_z = align_vec_z, align_vec_y=align_vec_y)
+            q = self.optimize_and_update()
+            self.step_simulation(q)
+        else:
+            self.step_simulation(q)
         # When exiting the loop getGripperIsGrasping is true, so the closing progress is finished
         
             
@@ -185,6 +179,14 @@ class Robot(object):
         return False
 
     def go_to_init_q(self, threshold=1):
+        """
+        let the robot move to the initial joint configuration
+
+        threshold:  the threshold euclidean distance in joint space where this action returns the termination flag
+        return:     0 if behavior has not terminated, 
+                    else return integer indicating status of behavior or behavior termination
+                    in this case 1 indicates termination
+        """
 
         self.optimization_objective.clear()
 
@@ -197,14 +199,10 @@ class Robot(object):
         self.step_simulation(q)
         return False
 
-    def open_gripper(self):
-        if not self.is_opening:
-            self.S.openGripper("R_gripper")
-            self.opening = True
-        return self.S.getGripperWidth("R_gripper") < self.gripper_width_threshold
-
     def go_to_handover(self):
-        
+        """
+        let the robot arms go into a handover position, where both arms have the object between their grippers
+        """
         self.optimization_objective.clear()
 
         y, _ = self.evaluate_dist("R_gripperCenter", "L_gripperCenter")

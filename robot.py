@@ -99,14 +99,19 @@ class Robot(object):
         q = self.S.get_q()
         diff, _ = self.C.evalFeature(self.ry.FS.position, [gripper + "Center"])
         diff -= np.array(obj_pos+pos)
-        
+        dist = np.linalg.norm(diff)
+        if alignment_priority < 0:
+            align_prio = min(-alignment_priority*(0.2/dist)**3, -alignment_priority)
+        else:
+            align_prio = alignment_priority 
+
         # TODO decide between np.linalg.norm(y) and np.abs(y).max()
         print("norm", str(np.linalg.norm(diff)))
         print("max", str(np.abs(diff).max()))
-        if np.linalg.norm(diff) < 0.01: #np.abs(y).max() < 1e-2:
+        if dist < 0.01: #np.abs(y).max() < 1e-2:
             return True
         
-        self.optimization_objective.move_to_position(gripper, obj_pos + pos, align_vec_z=align_vec_z, align_vec_y=align_vec_y, movement_priority=movement_priority, alignment_priority=alignment_priority)
+        self.optimization_objective.move_to_position(gripper, obj_pos + pos, align_vec_z=align_vec_z, align_vec_y=align_vec_y, movement_priority=movement_priority, alignment_priority=align_prio)
         q = self.optimize_and_update()
         self.step_simulation(q)
         return False

@@ -162,7 +162,7 @@ class RobotConnectFourProgram(RobotStateMachine):
         elif self.RSTATE == RobotState.drop:
             finish = self.robot.delayed_open_gripper(self.gripper_with_sphere, delay=50)
             if finish:
-                if not self.doing_handover:
+                if self.doing_handover:
                     self.gripper_with_sphere, self.receiving_gripper = self.receiving_gripper, self.gripper_with_sphere
                 self.doing_handover = False
                 self.RSTATE = RobotState.going_to_init_q

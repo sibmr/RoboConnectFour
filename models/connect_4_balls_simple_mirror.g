@@ -1,11 +1,11 @@
 ## spheres as game objects
-sphere1      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.65    ,  0, .75,      0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-sphere3      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.7     ,  0, .75,      0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-sphere5      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.75    ,  0, .75,      0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-sphere7      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.8     ,  0, .75,      0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-sphere9      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.85    ,  0, .75,      0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-sphere11      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.9     ,  0, .75,      0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
-sphere13       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.95    ,  0, .75,      0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere1      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.65     ,  0, .75,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere3      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.7      ,  0, .75,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere5      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.75     ,  0, .75,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere7      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.8      ,  0, .75,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere9      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.85     ,  0, .75,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere11      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.9      ,  0, .75,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
+sphere13       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[.95     ,  0, .75,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
 sphere15       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[1.0     ,  0, .75,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
 sphere17       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[1.05    ,  0, .75,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
 sphere19       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[1.1     ,  0, .75,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}

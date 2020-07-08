@@ -108,6 +108,7 @@ class RobotConnectFourProgram(RobotStateMachine):
         self.need_new_sphere = True
         self.receiving_gripper = "L_gripper"
         self.gripper_with_sphere = "R_gripper"
+        self.sphere_name = None
 
     def set_sphere_id(self, sphere_id):
         self.sphere_id = sphere_id
@@ -127,7 +128,7 @@ class RobotConnectFourProgram(RobotStateMachine):
             if finish:
                 self.RSTATE = RobotState.grasp
         elif self.RSTATE == RobotState.grasp:
-            finish = self.robot.grasp(self.gripper_with_sphere, "sphere{}".format(self.sphere_id), align_vec_z = [0,0,1], align_vec_y=[-1,0,0])
+            finish = self.robot.grasp(self.gripper_with_sphere, self.sphere_name, align_vec_z = [0,0,1], align_vec_y=[-1,0,0])
             if finish:
                 self.RSTATE = RobotState.lift
         elif self.RSTATE == RobotState.lift:

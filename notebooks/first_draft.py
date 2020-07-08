@@ -177,12 +177,17 @@ for t in range(10000):
         
         if waiting_for_input == 0 or game.player == game.player_1:
             # strategy from game object
-            robo_program.drop_spot = game.step()
+            action = game.step()
+            if action is None:
+                # Game has been won
+                pass
+            else:
+                robo_program.drop_spot = action
             # constant strategy
             #robo_program.drop_spot = 5
-            robo_program.sphere_id += 1
+            robo_program.set_sphere_id(robo_program.sphere_id + 1)
             robo_program.need_new_sphere = False
-            waiting_for_input = 200
+            waiting_for_input = 150
 
             # after next S.set state this teleports a sphere
             sim_spheres[robo_program.sphere_id+10].setPosition([1.2,0,0.8])
@@ -190,8 +195,7 @@ for t in range(10000):
         # ------------------------
     
     # keep setting drop pos to current user input
-    #if last_input is not None:
-    #    robo_program.drop_spot = last_input
+    robo_program.drop_spot = last_input[0]
     
     # do state update
     robo_program.step()

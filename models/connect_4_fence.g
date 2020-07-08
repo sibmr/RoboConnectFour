@@ -11,3 +11,5 @@ fence (world){ shape:ssBox, Q:<t(.95 -.95 .725)>, size:[.1 .1 .15 .01], color:[.
 fence (world){ shape:ssBox, Q:<t(.95  .95 .725)>, size:[.1 .1 .15 .01], color:[.75 .125  .125], contact, logical:{ }, friction:.1 }  ## left front corner (red)
 fence (world){ shape:ssBox, Q:<t(-.95 -.95 .725)>, size:[.1 .1 .15 .01], color:[.125 .125  .75], contact, logical:{ }, friction:.1 }  ## left back corner (blue)
 fence (world){ shape:ssBox, Q:<t(-.95  .95 .725)>, size:[.1 .1 .15 .01], color:[.125 .125  .75], contact, logical:{ }, friction:.1 }  ## left front corner (blue)
+
+fence (world){ shape:ssBox, pose=<T 0 0.5 0.65 0 0 -0.0499792 0.9987503 >, size:[1.8 0.9 .07 .01], color:[.3 .3  .3], contact, logical:{ }, friction:.1 }  ## ramp to keep spheres from escaping

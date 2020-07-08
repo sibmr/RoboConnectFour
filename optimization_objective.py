@@ -30,11 +30,12 @@ class OptimizationObjective(object):
     
     def grasp(self, gripper, obj, align_vec_z = None, align_vec_y=None):
         """
-        constraints gripping specified object with specified gripper
+        objectives for gripping specified object with specified gripper
         
         gripper:        string which identifies the gripper ("R_gripper", "L_gripper")
         obj:            string which identifies the target object ("obj0")
-        align_vec_z:    vector 
+        align_vec_z:    vector to align the zaxis of the gripper center with or None
+        align_vec_y:    vector to align the yaxis of the gripper center with or None
         """
         ry = self.ry
         self.komo.addObjective([1.], ry.FS.positionDiff, [gripper+"Center",obj], ry.OT.sos, [2e3])
@@ -57,7 +58,14 @@ class OptimizationObjective(object):
 
     def move_to_position(self, gripper, pos, align_vec_z = None, align_vec_y=None, movement_priority=5e3, alignment_priority=3e3):
         """
-        constraints for moving the gripper center of specified gripper to specified position
+        objectives for moving the gripper center of specified gripper to specified position
+                
+        gripper:            string which identifies the gripper ("R_gripper", "L_gripper")
+        pos:                position to align the gripper center with
+        align_vec_z:        vector to align the zaxis of the gripper center with or None
+        align_vec_y:        vector to align the yaxis of the gripper center with or None
+        movement_priority:  priority of aligning the gripper position
+        alignment_priority: priority of aligning the gripper axes
         """
         ry = self.ry
         if align_vec_z:
@@ -80,7 +88,9 @@ class OptimizationObjective(object):
     
     def go_to_q(self, q):
         """
-        constraints for moving the gripper center of specified gripper to specified position
+        objectives to let the robot arms move to some state in joint space
+
+        q:  the state in joint space to move to
         """
         ry = self.ry
         self.komo.addObjective([], ry.FS.accumulatedCollisions, [], ry.OT.ineq, [1e3])
@@ -92,6 +102,11 @@ class OptimizationObjective(object):
         self.komo.addObjective([], ry.FS.qItself, ["L_finger2"], ry.OT.eq, [1e2], order=1)
 
     def go_to_handover(self, alignment_prio=2e2):
+        """
+        objectives to let the robot arms do a handover
+
+        alignment_prio:     priority of the objectives for aligning the gripper axes
+        """
         ry = self.ry
         self.komo.addObjective([1.], ry.FS.positionDiff, ["R_gripperCenter","L_gripperCenter"], ry.OT.sos, [3e2])
         self.komo.addObjective([1.], ry.FS.scalarProductZZ, ["R_gripperCenter","L_gripperCenter"], ry.OT.sos, [alignment_prio], target=[-1])

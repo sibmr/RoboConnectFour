@@ -172,7 +172,7 @@ class RobotConnectFourProgram(RobotStateMachine):
             if finish:
                 self.RSTATE = RobotState.receive
         elif self.RSTATE == RobotState.receive:
-            finish = self.robot.grasp(self.receiving_gripper, self.sphere_name)
+            finish = self.robot.grasp(self.receiving_gripper)#, self.sphere_name)
             if finish:
                 self.RSTATE = RobotState.release
         elif self.RSTATE == RobotState.release:

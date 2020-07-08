@@ -110,6 +110,7 @@ class RobotConnectFourProgram(RobotStateMachine):
         self.receiving_gripper = "L_gripper"
         self.gripper_with_sphere = "R_gripper"
         self.sphere_name = None
+        self.doing_handover = False
 
     def set_sphere_id(self, sphere_id, mode=1):
         self.sphere_id = sphere_id
@@ -144,8 +145,10 @@ class RobotConnectFourProgram(RobotStateMachine):
             if finish:
                 if self.drop_spot > 2 and self.gripper_with_sphere == "R_gripper":
                     self.RSTATE = RobotState.align_pos
+                    self.doing_handover = True
                 elif self.drop_spot < 3 and self.gripper_with_sphere == "L_gripper":
                     self.RSTATE = RobotState.align_pos
+                    self.doing_handover = True
                 else:
                     self.RSTATE = RobotState.goto_q_before_handover
         elif self.RSTATE == RobotState.align_pos:
@@ -159,7 +162,9 @@ class RobotConnectFourProgram(RobotStateMachine):
         elif self.RSTATE == RobotState.drop:
             finish = self.robot.delayed_open_gripper(self.gripper_with_sphere, delay=50)
             if finish:
-                self.gripper_with_sphere, self.receiving_gripper = self.receiving_gripper, self.gripper_with_sphere
+                if not self.doing_handover:
+                    self.gripper_with_sphere, self.receiving_gripper = self.receiving_gripper, self.gripper_with_sphere
+                self.doing_handover = False
                 self.RSTATE = RobotState.going_to_init_q
         # ------------------------------------------------------------------------------
         # handover states

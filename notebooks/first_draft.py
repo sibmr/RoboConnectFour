@@ -148,6 +148,7 @@ robo_program = RobotConnectFourProgram(robo)
 waiting_for_input = 0
 last_input = [6]
 human_player = False
+player_won = None
 if human_player:
     game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input))
 else:
@@ -201,8 +202,13 @@ for t in range(10000):
             if action is None:
                 # Game has been won
                 # TODO add something for winning
-                if game.player == game.player_1: robo_program.game_won(1)
-                if game.player == game.player_2: robo_program.game_won(2)
+                if game.player == game.player_1: 
+                    robo_program.game_won(2)
+                    player_won = game.player_2
+                if game.player == game.player_2:
+                    robo_program.game_won(1)
+                    player_won = game.player_1
+                
             else:
                 robo_program.drop_spot = action
             
@@ -217,11 +223,16 @@ for t in range(10000):
                 sim_spheres[robo_program.sphere_id+22].setPosition([-1.2,0,0.8])
             S.setState(RealWorld.getFrameState())
         # ------------------------
+    
     # whacky color changes
-    if t%2 == 0:
-        set_fence_color([1,0,0], corners=True)
-    else:
-        set_fence_color([.3,.3,.3])
+    if player_won is not None:
+        if t%2 == 0:
+            if player_won == game.player_1:
+                set_fence_color([1,0,0], corners=True)
+            else:
+                set_fence_color([0,0,1], corners=True)
+        else:
+            set_fence_color([.3,.3,.3])
 
     # keep setting drop pos to current user input
     # perception is needed for this

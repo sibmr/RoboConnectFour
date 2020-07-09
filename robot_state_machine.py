@@ -15,6 +15,8 @@ class RobotState(Enum):
     receive = 11
     release = 12
     goto_q_before_handover = 13
+    goto_q_after_winning = 14
+    goto_winning_pose = 15
 
 
 class RobotStateMachine(object):
@@ -114,6 +116,11 @@ class RobotConnectFourProgram(RobotStateMachine):
         self.gripper_with_sphere = "R_gripper"
         self.sphere_name = None
         self.doing_handover = False
+        self.arm_won = None
+    
+    def game_won(self, winning_player):
+        self.RSTATE = RobotState.goto_winning_pose
+        self.arm_won = "R_gripper" if winning_player == 1 else "L_gripper"
 
     def set_sphere_id(self, sphere_id, mode=1):
         self.sphere_id = sphere_id
@@ -160,11 +167,11 @@ class RobotConnectFourProgram(RobotStateMachine):
             print("align pos")
             print(self.sphere_id)
             if finish:
-                self.need_new_sphere = True
                 self.RSTATE = RobotState.drop
         elif self.RSTATE == RobotState.drop:
             finish = self.robot.delayed_open_gripper(self.gripper_with_sphere, delay=50)
             if finish:
+                self.need_new_sphere = True
                 if self.doing_handover:
                     self.gripper_with_sphere, self.receiving_gripper = self.receiving_gripper, self.gripper_with_sphere
                 self.doing_handover = False
@@ -189,3 +196,17 @@ class RobotConnectFourProgram(RobotStateMachine):
                 self.gripper_with_sphere, self.receiving_gripper = self.receiving_gripper, self.gripper_with_sphere
                 self.RSTATE = RobotState.align_pos
         # ------------------------------------------------------------------------------
+        # after winning - final state
+        elif self.RSTATE == RobotState.goto_q_after_winning:
+            finish = self.robot.go_to_init_q()
+            if finish:
+                self.RSTATE = RobotState.goto_winning_pose
+        elif self.RSTATE == RobotState.goto_winning_pose:
+            if self.arm_won == "R_gripper":
+                finish = self.robot.move_gripper_to_pos(self.arm_won, [0.5,0,2])
+            else:
+                finish = self.robot.move_gripper_to_pos(self.arm_won, [-0.5,0,2])
+            if finish:
+                self.RSTATE = RobotState.goto_winning_pose
+        # ------------------------------------------------------------------------------
+        

@@ -159,8 +159,9 @@ for t in range(10000):
             break
     
     # look for user input
+    usr_in = cv.waitKey(1)
     for i in range(0,7): 
-        if cv.waitKey(1) == ord(str(i)):
+        if  usr_in == ord(str(i)):
             last_input[0] = i
     print("Input: {}".format(last_input))
 
@@ -193,13 +194,14 @@ for t in range(10000):
             waiting_for_input = 150
 
             # after next S.set state this teleports a sphere
-            sim_spheres[robo_program.sphere_id+10].setPosition([1.2,0,0.8])
-            S.setState(RealWorld.getFrameState())
+            #sim_spheres[robo_program.sphere_id+10].setPosition([1.2,0,0.8])
+            #S.setState(RealWorld.getFrameState())
         # ------------------------
     
     # keep setting drop pos to current user input
     # perception is needed for this
-    robo_program.drop_spot = last_input[0]
+    if game.player == game.player_1:
+        robo_program.drop_spot = last_input[0]
     
     # do state update
     robo_program.step()

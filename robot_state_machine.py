@@ -149,7 +149,7 @@ class RobotConnectFourProgram(RobotStateMachine):
                 if self.drop_spot > 2 and self.gripper_with_sphere == "R_gripper":
                     self.RSTATE = RobotState.align_pos
                     self.doing_handover = True
-                elif self.drop_spot < 3 and self.gripper_with_sphere == "L_gripper":
+                elif self.drop_spot < 4 and self.gripper_with_sphere == "L_gripper":
                     self.RSTATE = RobotState.align_pos
                     self.doing_handover = True
                 else:

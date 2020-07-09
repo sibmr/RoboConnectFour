@@ -45,7 +45,7 @@ class Perception(object):
         rgb_grid = np.zeros(rgb.shape, dtype=np.uint8)
         rgb_grid[y:y+h,x:x+w] = rgb[y:y+h,x:x+w]
 
-        center_lst_red, center_blue_lst = Perception.extract_circles(rgb_grid)
+        center_lst_red, center_blue_lst = Perception.extract_circles(rgb_grid, Perception.erode)
         grid = Perception.get_grid_state_from_centers(center_lst_red, center_blue_lst, x, y, w, h)
 
         if display:
@@ -96,7 +96,7 @@ class Perception(object):
         return x,y,w,h
 
     @staticmethod
-    def extract_circles(img, display=False):
+    def extract_circles(img, strategy, display=False):
         img_seg_red = Perception.segment_color(img, [255,0,0])
         img_seg_blue = Perception.segment_color(img, [0,0,255])
         if display:
@@ -104,8 +104,8 @@ class Perception(object):
                 cv.imshow('OPENCV - red', img_seg_red)
             if len(img_seg_blue)>0:
                 cv.imshow('OPENCV - blue', img_seg_blue)
-        center_lst_seg_red = Perception.erode(img_seg_red)
-        center_lst_seg_blue = Perception.erode(img_seg_blue)
+        center_lst_seg_red = strategy(img_seg_red)
+        center_lst_seg_blue = strategy(img_seg_blue)
         return center_lst_seg_red, center_lst_seg_blue
 
     @staticmethod

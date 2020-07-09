@@ -43,7 +43,7 @@ for i in range(1,12):
     RealWorld.getFrame("connect4_coll{}".format(i)).setContact(1)
 
 sim_spheres = []
-for i in range(1,25):
+for i in range(1,57):
     sphere = RealWorld.getFrame("sphere{}".format(i))
     sphere.setContact(1)
     sim_spheres.append(sphere)

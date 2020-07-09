@@ -193,8 +193,11 @@ for t in range(10000):
             waiting_for_input = 150
 
             # after next S.set state this teleports a sphere
-            #sim_spheres[robo_program.sphere_id+10].setPosition([1.2,0,0.8])
-            #S.setState(RealWorld.getFrameState())
+            if game.player == game.player_1:
+                sim_spheres[robo_program.sphere_id+10].setPosition([1.2,0,0.8])
+            else:
+                sim_spheres[robo_program.sphere_id+10].setPosition([-1.2,0,0.8])
+            S.setState(RealWorld.getFrameState())
         # ------------------------
     
     # keep setting drop pos to current user input

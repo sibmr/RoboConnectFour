@@ -23,7 +23,7 @@ sphere16       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-1.0     ,  0, .75
 sphere18       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-1.05    ,  0, .75,    0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
 sphere20      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-1.1     ,  0, .75,    0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
 sphere22      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-1.15    ,  0,  .8,    0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
-sphere24      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-1.2     ,  0,  .8,    0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
+sphere24      		{  shape:sphere, size:[0.026],, mass:0.2 X:<[-1.2     ,  0,  .8,     0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}
 
 sphere25       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[16     ,  0,    0,     0, 0, 0, 1]> color:[ 1 0 0 1 ] friction:.2}
 sphere26       		{  shape:sphere, size:[0.026],, mass:0.2 X:<[17     ,  0,    0,     0, 0, 0, 1]> color:[ 0 0 1 1 ] friction:.2}

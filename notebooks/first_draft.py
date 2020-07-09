@@ -194,9 +194,9 @@ for t in range(10000):
 
             # after next S.set state this teleports a sphere
             if game.player == game.player_1:
-                sim_spheres[robo_program.sphere_id+10].setPosition([1.2,0,0.8])
+                sim_spheres[robo_program.sphere_id+22].setPosition([1.2,0,0.8])
             else:
-                sim_spheres[robo_program.sphere_id+10].setPosition([-1.2,0,0.8])
+                sim_spheres[robo_program.sphere_id+22].setPosition([-1.2,0,0.8])
             S.setState(RealWorld.getFrameState())
         # ------------------------
     

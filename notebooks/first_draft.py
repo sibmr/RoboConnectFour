@@ -13,8 +13,9 @@ connect_4_model_file = "../models/connect_4_6x7_simple.g"
 connect_4_sphere_file = "../models/connect_4_balls_simple.g"
 ball_ramp_file = "../models/ball_ramp_conv.g"
 pandas_model_file = '../../robotics-course/scenarios/pandasTable.g'
-scene_file = '../models/connect_4_scenario_mirror.g'
 ghost_sphere_file = '../models/connect_4_ghost_sphere.g'
+scene_file_sim = '../models/connect_4_scenario_mirror_sim.g'
+scene_file_conf = '../models/connect_4_scenario_mirror_conf.g'
 # In[2]
 
 # -------------------------------------------------------------
@@ -27,7 +28,7 @@ RealWorld = ry.Config()
 #RealWorld.addFile(connect_4_model_file)
 #RealWorld.addFile(connect_4_sphere_file)
 #RealWorld.addFile(ball_ramp_file)
-RealWorld.addFile(scene_file)
+RealWorld.addFile(scene_file_sim)
 V = ry.ConfigurationViewer()
 V.setConfiguration(RealWorld)
 
@@ -75,8 +76,7 @@ C = ry.Config()
 #C.addFile(pandas_model_file)
 #C.addFile(connect_4_model_file)
 #C.addFile(ball_ramp_file)
-C.addFile(scene_file)
-C.addFile(ghost_sphere_file)
+C.addFile(scene_file_conf)
 #V = ry.ConfigurationViewer()
 V.setConfiguration(C)
 cameraFrame = C.frame("camera")
@@ -103,6 +103,7 @@ for i in range(1,11):
 #for i in range(1,6):
 #    C.getFrame("ball_ramp{}".format(i)).setContact(1)
 
+"""
 perceived_spheres =[]
 for i in range(1,len(sim_spheres)):
     sphere = C.getFrame("sphere{}".format(i))
@@ -111,6 +112,7 @@ for i in range(1,len(sim_spheres)):
     sphere.setContact(1)
     sphere.setPosition([0,0,10+i])
     perceived_spheres.append(sphere)
+"""
 
 
 V.setConfiguration(C)
@@ -153,8 +155,8 @@ for t in range(10000):
         for i in range(len(sim_spheres)-1):
             p_obj = sim_spheres[i].getPosition()   
             r_obj = sim_spheres[i].getQuaternion()
-            perceived_spheres[i].setPosition(p_obj)
-            perceived_spheres[i].setQuaternion(r_obj)
+            #perceived_spheres[i].setPosition(p_obj)
+            #perceived_spheres[i].setQuaternion(r_obj)
 
         if len(rgb)>0: cv.imshow('OPENCV - rgb', bgr)
         if len(depth)>0: cv.imshow('OPENCV - depth', 0.5* depth)

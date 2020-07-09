@@ -74,10 +74,17 @@ class Perception(object):
         grid = np.zeros((grid_width, grid_height), dtype=np.uint8)
         for center_red in center_red_lst:
             grid_x, grid_y = Perception.calc_cell_from_pixel(center_red, x, y, w, h, grid_width, grid_height)
-            grid[grid_x, grid_y] = 1
+            if grid_x < grid_width and grid_y < grid_height:
+                grid[grid_x, grid_y] = 1
+            else:
+                print("Invalid position detected: (" + str(grid_x) + "|" + str(grid_y) + ")")
         for center_blue in center_blue_lst:
             grid_x, grid_y = Perception.calc_cell_from_pixel(center_blue, x, y, w, h, grid_width, grid_height)
-            grid[grid_x, grid_y] = 2
+            if grid_x < grid_width and grid_y < grid_height:
+                grid[grid_x, grid_y] = 2
+            else:
+                print("Invalid position detected: (" + str(grid_x) + "|" + str(grid_y) + ")")        
+                
         return grid
 
     @staticmethod

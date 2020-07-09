@@ -160,9 +160,9 @@ for t in range(10000):
     
     # look for user input
     usr_in = cv.waitKey(1)
-    for i in range(0,7): 
+    for i in range(1,8): 
         if  usr_in == ord(str(i)):
-            last_input[0] = i
+            last_input[0] = i-1
     print("Input: {}".format(last_input))
 
     # give the program new sphere id and drop position if needed
@@ -187,8 +187,7 @@ for t in range(10000):
                 pass
             else:
                 robo_program.drop_spot = action
-            # constant strategy
-            #robo_program.drop_spot = 5
+            
             robo_program.set_sphere_id(robo_program.sphere_id + 1)
             robo_program.need_new_sphere = False
             waiting_for_input = 150

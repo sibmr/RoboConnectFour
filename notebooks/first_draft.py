@@ -125,7 +125,7 @@ sys.path.append('../')
 from robot import Robot
 from robot_state_machine import RobotConnectFourProgram
 from game import Game
-from strategy import MonteCarloStrategy, get_asynch_human_strategy
+from strategy import MonteCarloStrategy, MinMaxStrategy, get_asynch_human_strategy
 
 # -------------------------------------------------------------
 
@@ -135,7 +135,11 @@ robo_program = RobotConnectFourProgram(robo)
 # variables for handling game state and asynchronous user input
 waiting_for_input = 0
 last_input = [6]
-game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input))
+human_player = False
+if human_player:
+    game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input))
+else:
+    game = Game(MonteCarloStrategy, MinMaxStrategy)
 
 for t in range(10000):
 
@@ -162,7 +166,7 @@ for t in range(10000):
     usr_in = cv.waitKey(1)
     for i in range(1,8): 
         if  usr_in == ord(str(i)):
-            last_input[0] = i-1
+            last_input[0] = 6-(i-1)
     print("Input: {}".format(last_input))
 
     # give the program new sphere id and drop position if needed
@@ -174,7 +178,7 @@ for t in range(10000):
         
         # step the ai - wait for input on the humans turn
         # ------------------------
-        if game.player == game.player_2:
+        if game.player == game.player_2 and human_player:
             waiting_for_input -= 1
         
         if waiting_for_input == 0 or game.player == game.player_1:
@@ -184,13 +188,14 @@ for t in range(10000):
             # TODO: perception + game state update here also
             if action is None:
                 # Game has been won
+                # TODO add something for winning
                 pass
             else:
                 robo_program.drop_spot = action
             
             robo_program.set_sphere_id(robo_program.sphere_id + 1)
             robo_program.need_new_sphere = False
-            waiting_for_input = 150
+            if human_player: waiting_for_input = 150
 
             # after next S.set state this teleports a sphere
             if game.player == game.player_1:
@@ -202,7 +207,7 @@ for t in range(10000):
     
     # keep setting drop pos to current user input
     # perception is needed for this
-    if game.player == game.player_1:
+    if game.player == game.player_1 and human_player:
         robo_program.drop_spot = last_input[0]
     
     # do state update

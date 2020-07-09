@@ -40,12 +40,12 @@ class Perception(object):
         depth = cv.rotate(depth, cv.ROTATE_180)
         rgb = cv.GaussianBlur(rgb, (5,5), 1, 1)
 
-        grid_gray = Perception.extract_center_object(depth)
+        grid_gray = Perception.extract_roi(depth)
         x,y,w,h = Perception.extract_rectangle(grid_gray)
         rgb_grid = np.zeros(rgb.shape, dtype=np.uint8)
         rgb_grid[y:y+h,x:x+w] = rgb[y:y+h,x:x+w]
 
-        center_lst_red, center_blue_lst = Perception.extract_circles(rgb_grid, Perception.erode)
+        center_lst_red, center_blue_lst = Perception.extract_circles(rgb_grid, strategy=Perception.erode)
         grid = Perception.get_grid_state_from_centers(center_lst_red, center_blue_lst, x, y, w, h)
 
         if display:
@@ -88,7 +88,7 @@ class Perception(object):
         return grid
 
     @staticmethod
-    def extract_center_object(depth):
+    def extract_roi(depth):
         dim = depth.shape
         depth_grid = depth[round(dim[0]/2), round(dim[1]/2)]
         diff_bool = (np.abs(depth-depth_grid) < 1e-7)

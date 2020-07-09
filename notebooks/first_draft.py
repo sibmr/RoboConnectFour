@@ -197,7 +197,8 @@ for t in range(10000):
             if action is None:
                 # Game has been won
                 # TODO add something for winning
-                pass
+                if game.player == game.player_1: robo_program.game_won(1)
+                if game.player == game.player_2: robo_program.game_won(2)
             else:
                 robo_program.drop_spot = action
             

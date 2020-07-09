@@ -116,6 +116,12 @@ for i in range(1,len(sim_spheres)):
 
 
 V.setConfiguration(C)
+"""
+def set_fence_color(color,corners):
+    for i in range(1,7):
+        RealWorld.getFrame(f"fence{i}").setColor(c)
+        S.setState(RealWorld.getFrameState())
+"""
 
 # In[7]
 
@@ -206,7 +212,15 @@ for t in range(10000):
                 sim_spheres[robo_program.sphere_id+22].setPosition([-1.2,0,0.8])
             S.setState(RealWorld.getFrameState())
         # ------------------------
-    
+    for i in range(1,7):
+        c = []
+        if t%2 == 0:
+            c = [1,0,0]
+        if t%2 == 1:
+            c = [.3,.3,.3]
+        RealWorld.getFrame(f"fence{i}").setColor(c)
+        S.setState(RealWorld.getFrameState())
+
     # keep setting drop pos to current user input
     # perception is needed for this
     if game.player == game.player_1 and human_player:

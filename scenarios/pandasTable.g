@@ -21,7 +21,8 @@ Edit R_panda_link0 (table)  { Q:<t( .4 -.4 .1) d(90 0 0 1)> }
 
 camera(world){
 
-    Q:<t(0.0 0.6 0.85) d(-90 1 0 0)>
+    #Q:<t(0.0 0.6 0.85) d(-90 0 0 0)> 0.7071
+    pose=<T 0.0 0.6 0.85 0 0 0.7071 0.7071>
     shape:marker, size:[.1],
     focalLength:0.895, width:640, height:360, zRange:[.5 100]
 }

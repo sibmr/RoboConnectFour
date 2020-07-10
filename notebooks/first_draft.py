@@ -12,7 +12,7 @@ print(cv.__version__)
 connect_4_model_file = "../models/connect_4_6x7_simple.g"
 connect_4_sphere_file = "../models/connect_4_balls_simple.g"
 ball_ramp_file = "../models/ball_ramp_conv.g"
-pandas_model_file = '../../robotics-course/scenarios/pandasTable.g'
+pandas_model_file = '../scenarios/pandasTable.g'
 ghost_sphere_file = '../models/connect_4_ghost_sphere.g'
 scene_file_sim = '../models/connect_4_scenario_mirror_sim.g'
 scene_file_conf = '../models/connect_4_scenario_mirror_conf.g'

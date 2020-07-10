@@ -121,11 +121,16 @@ class Perception(object):
         return imgray
 
     @staticmethod
-    def erode(imgray, iterations=5):
+    def erode(imgray, iterations=5, display=False):
         #imgray = cv.GaussianBlur(imgray, (3,3), 1, 1)
         kernel = np.ones((3,3),np.uint8)
         imgray = cv.erode(imgray,kernel,iterations=iterations)
         contours, hierarchy = cv.findContours(imgray,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
+        if display:
+            imgray_disp = imgray.copy()
+            if len(imgray_disp)>0:
+                imgray_disp = cv.drawContours(imgray_disp, contours, -1, color=(0,255,0))
+                cv.imshow('OPENCV - erode', imgray_disp)
         center_lst = []
         for contour in contours:
             M = cv.moments(contour)

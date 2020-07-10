@@ -35,9 +35,9 @@ class Perception(object):
 
     @staticmethod
     def detect_grid_state(rgb, depth, display=True):
-        rgb = cv.rotate(rgb, rotateCode=cv.ROTATE_180)
+        #rgb = cv.rotate(rgb, rotateCode=cv.ROTATE_180)
         rgb = cv.flip(rgb, flipCode=1)
-        depth = cv.rotate(depth, cv.ROTATE_180)
+        #depth = cv.rotate(depth, cv.ROTATE_180)
         rgb = cv.GaussianBlur(rgb, (5,5), 1, 1)
 
         x,y,w,h = Perception.extract_roi(depth)

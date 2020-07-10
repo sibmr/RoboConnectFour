@@ -81,15 +81,6 @@ C.addFile(scene_file_conf)
 V.setConfiguration(C)
 cameraFrame = C.frame("camera")
 
-#the focal length
-f = 0.895
-f = f * 360.
-fxfypxpy = [f, f, 320., 180.]
-
-# save initial background
-[rgb0, depth0] = S.getImageAndDepth()  #we don't need images with 100Hz, rendering is slow
-points0 = S.depthData2pointCloud(depth0, fxfypxpy)
-
 # In[6]
 
 # -------------------------------------------------------------
@@ -103,18 +94,6 @@ for i in range(1,11):
 #for i in range(1,6):
 #    C.getFrame("ball_ramp{}".format(i)).setContact(1)
 
-"""
-perceived_spheres =[]
-for i in range(1,len(sim_spheres)):
-    sphere = C.getFrame("sphere{}".format(i))
-    sphere.setShape(ry.ST.sphere, [.022])
-    #sphere.setColor([0,0,1])
-    sphere.setContact(1)
-    sphere.setPosition([0,0,10+i])
-    perceived_spheres.append(sphere)
-"""
-
-
 V.setConfiguration(C)
 
 def set_fence_color(color, corners=False):
@@ -124,7 +103,6 @@ def set_fence_color(color, corners=False):
     for i in range(1,k):
         RealWorld.getFrame(f"fence{i}").setColor(color)
         S.setState(RealWorld.getFrameState())
-    
         
 
 # In[7]
@@ -138,42 +116,31 @@ from robot import Robot
 from robot_state_machine import RobotConnectFourProgram
 from game import Game
 from strategy import MonteCarloStrategy, MinMaxStrategy, get_asynch_human_strategy
+from perception import Perception
 
 # -------------------------------------------------------------
-
-robo = Robot(0.015, C, V, S, ry)
+tau = 0.015
+robo = Robot(tau, C, V, S, ry)
 robo_program = RobotConnectFourProgram(robo)
 
 # variables for handling game state and asynchronous user input
 waiting_for_input = 0
-last_input = [6]
+last_input = [6] # TODO why 6?
 human_player = False
 player_won = None
 if human_player:
-    game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input))
+    game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input), selfstate=False)
 else:
-    game = Game(MonteCarloStrategy, MinMaxStrategy)
+    game = Game(MonteCarloStrategy, MinMaxStrategy, selfstate=False)
 
-for t in range(10000):
+timestep = 0
+while player_won is None:
 
-    # do perception every 10th timestep - rendering is slow
-    if t%10 == 0:
+    # do perception every 20th timestep - rendering is slow
+    if timestep % 20 == 0: # rendering period = 20*timestep = 20*0.015s = 0.3s
         [rgb, depth] = S.getImageAndDepth()
-        points = S.depthData2pointCloud(depth, fxfypxpy)
-        bgr = cv.cvtColor(rgb,cv.COLOR_RGB2BGR)
-
-        # skipping perception
-        for i in range(len(sim_spheres)-1):
-            p_obj = sim_spheres[i].getPosition()   
-            r_obj = sim_spheres[i].getQuaternion()
-            #perceived_spheres[i].setPosition(p_obj)
-            #perceived_spheres[i].setQuaternion(r_obj)
-
-        if len(rgb)>0: cv.imshow('OPENCV - rgb', bgr)
-        if len(depth)>0: cv.imshow('OPENCV - depth', 0.5* depth)
-
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
+        grid = Perception.detect_grid_state(rgb, depth)
+        game.set_grid(grid)
     
     # look for user input
     usr_in = cv.waitKey(1)
@@ -186,47 +153,47 @@ for t in range(10000):
     # put new sphere on table if needed
     print("waiting for input {}".format(waiting_for_input))
     if robo_program.need_new_sphere:
-        
-        
-        
         # step the ai - wait for input on the humans turn
         # ------------------------
-        if game.player == game.player_2 and human_player:
+        if game.player == game.player_2 and human_player and waiting_for_input > 0:
             waiting_for_input -= 1
         
         if waiting_for_input == 0 or game.player == game.player_1:
-            # strategy from game object
-            # TODO: perception + game state update here
-            action = game.step()
-            # TODO: perception + game state update here also
-            if action is None:
-                # Game has been won
-                # TODO add something for winning
-                if game.player == game.player_1: 
-                    robo_program.game_won(2)
-                    player_won = game.player_2
-                if game.player == game.player_2:
-                    robo_program.game_won(1)
-                    player_won = game.player_1
-                
+            # Only execute next game step if previous operation is executed and perceived
+            if not game.next_move:
+                print("Waiting for turn to be executed")
             else:
-                robo_program.drop_spot = action
-            
-            robo_program.set_sphere_id(robo_program.sphere_id + 1)
-            robo_program.need_new_sphere = False
-            if human_player: waiting_for_input = 150
+                # strategy from game object
+                # TODO: perception + game state update here
+                action = game.step()
+                # TODO: perception + game state update here also
+                if action is None:
+                    # Game has been won
+                    # TODO add something for winning
+                    if game.player == game.player_1:
+                        robo_program.game_won(2)
+                        player_won = game.player_2
+                    if game.player == game.player_2:
+                        robo_program.game_won(1)
+                        player_won = game.player_1
+                else:
+                    robo_program.drop_spot = action
 
-            # after next S.set state this teleports a sphere
-            if game.player == game.player_1:
-                sim_spheres[robo_program.sphere_id+22].setPosition([1.2,0,0.8])
-            else:
-                sim_spheres[robo_program.sphere_id+22].setPosition([-1.2,0,0.8])
-            S.setState(RealWorld.getFrameState())
-        # ------------------------
+                robo_program.set_sphere_id(robo_program.sphere_id + 1) # TODO why do we still access sphere IDs?
+                robo_program.need_new_sphere = False
+                if human_player: waiting_for_input = 150
+
+                # after next S.set state this teleports a sphere
+                if game.player == game.player_1:
+                    sim_spheres[robo_program.sphere_id+22].setPosition([1.2,0,0.8])
+                else:
+                    sim_spheres[robo_program.sphere_id+22].setPosition([-1.2,0,0.8])
+                S.setState(RealWorld.getFrameState())
+            # ------------------------
     
     # whacky color changes
     if player_won is not None:
-        if t%2 == 0:
+        if timestep % 2 == 0:
             if player_won == game.player_1:
                 set_fence_color([1,0,0], corners=True)
             else:
@@ -242,4 +209,5 @@ for t in range(10000):
     # do state update
     robo_program.step()
 
+    timestep += 1
 # %%

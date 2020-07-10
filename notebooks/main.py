@@ -129,9 +129,9 @@ last_input = [6] # TODO why 6?
 human_player = False
 player_won = None
 if human_player:
-    game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input), selfstate=False)
+    game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input), selfstate=True)
 else:
-    game = Game(MonteCarloStrategy, MinMaxStrategy, selfstate=False)
+    game = Game(MonteCarloStrategy, MinMaxStrategy, selfstate=True)
 
 timestep = 0
 while player_won is None:

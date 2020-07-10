@@ -40,7 +40,7 @@ class Game:
         self.grid.print()
 
     def step(self):
-        self.next_move = False
+        self.next_move = self.selfstate
         self.grid.print()
         print("Player " + str(self.player.player) + "'s Turn: ", end='')
         if self.grid.won() is not None:

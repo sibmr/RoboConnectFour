@@ -125,8 +125,8 @@ robo_program = RobotConnectFourProgram(robo)
 
 # variables for handling game state and asynchronous user input
 waiting_for_input = 0
-last_input = [6] # TODO why 6?
-human_player = False
+last_input = [6] # Human input initialization should be arbitrary existing column (0-6)
+human_player = True
 player_won = None
 if human_player:
     game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input), selfstate=True)
@@ -134,7 +134,7 @@ else:
     game = Game(MonteCarloStrategy, MinMaxStrategy, selfstate=True)
 
 timestep = 0
-while player_won is None:
+while last_input[0] != 7: # Human can quit by pressing 0 
 
     # do perception every 20th timestep - rendering is slow
     if timestep % 20 == 0: # rendering period = 20*timestep = 20*0.015s = 0.3s
@@ -144,7 +144,7 @@ while player_won is None:
 
     # look for user input
     usr_in = cv.waitKey(1)
-    for i in range(1,8): 
+    for i in range(0,8): 
         if  usr_in == ord(str(i)):
             last_input[0] = 6-(i-1)
     print("Input: {}".format(last_input))
@@ -173,8 +173,11 @@ while player_won is None:
                     # Not finished, next turn
                     robo_program.drop_spot = action
 
-                robo_program.set_sphere_id(robo_program.sphere_id + 1) # TODO why do we still access sphere IDs?
+                # Count how many spheres have been dropped in the grid
+                robo_program.set_sphere_id(robo_program.sphere_id + 1)
                 robo_program.need_new_sphere = False
+                
+                # reset waiting counter if there is a human player
                 if human_player: waiting_for_input = 150
 
                 # after next S.set state this teleports a sphere

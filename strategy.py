@@ -9,12 +9,15 @@ from game import Game
 
 class Strategy:
 
-    def __init__(self, player, grid: Grid):
+    def __init__(self, player, grid: Grid, selfstate=False):
         self.player = player
         self.grid = grid
+        self.selfstate = selfstate
 
     def insert(self, column):
-        self.grid.insert(column, self.player)
+        # TODO remove insert method, no ground truth game state
+        if self.selfstate:
+            self.grid.insert(column, self.player)
 
 
 class RandomStrategy(Strategy):
@@ -74,11 +77,8 @@ def get_asynch_human_strategy(input_object):
 
 class MonteCarloStrategy(Strategy):
 
-    def __init__(self, player, grid: Grid, computation_time=1):
-        Strategy.__init__(self, player, grid)
-        self.computation_time = computation_time
-
     def insert(self):
+        computation_time = 1.0
         column = None
         columns_free = self.grid.free_columns()
         if len(columns_free):
@@ -87,8 +87,8 @@ class MonteCarloStrategy(Strategy):
                 wins = 0.0
                 losses = 0.0
                 start_time = time.time()
-                while time.time() < start_time + self.computation_time / len(columns_free):
-                    game = Game(RandomStrategy, RandomStrategy, deepcopy(self.grid))
+                while time.time() < start_time + computation_time / len(columns_free):
+                    game = Game(RandomStrategy, RandomStrategy, deepcopy(self.grid), selfstate=True)
                     my_player_id = game.player.player
                     Strategy.insert(game.player, column_free)
                     game.turn()

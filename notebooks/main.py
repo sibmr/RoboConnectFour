@@ -141,7 +141,7 @@ while player_won is None:
         [rgb, depth] = S.getImageAndDepth()
         grid = Perception.detect_grid_state(rgb, depth)
         game.set_grid(grid)
-    
+
     # look for user input
     usr_in = cv.waitKey(1)
     for i in range(1,8): 
@@ -151,7 +151,8 @@ while player_won is None:
 
     # give the program new sphere id and drop position if needed
     # put new sphere on table if needed
-    print("waiting for input {}".format(waiting_for_input))
+    if waiting_for_input != 0:
+        print("Waiting for input {}".format(waiting_for_input))
     if robo_program.need_new_sphere:
         # step the ai - wait for input on the humans turn
         # ------------------------
@@ -159,24 +160,17 @@ while player_won is None:
             waiting_for_input -= 1
         
         if waiting_for_input == 0 or game.player == game.player_1:
-            # Only execute next game step if previous operation is executed and perceived
             if not game.next_move:
+                # Only execute next game step if previous operation is executed and perceived
                 print("Waiting for turn to be executed")
             else:
-                # strategy from game object
-                # TODO: perception + game state update here
                 action = game.step()
-                # TODO: perception + game state update here also
                 if action is None:
-                    # Game has been won
-                    # TODO add something for winning
-                    if game.player == game.player_1:
-                        robo_program.game_won(2)
-                        player_won = game.player_2
-                    if game.player == game.player_2:
-                        robo_program.game_won(1)
-                        player_won = game.player_1
+                    # Game is finished
+                    player_won = game.player.player
+                    robo_program.game_won(player_won)
                 else:
+                    # Not finished, next turn
                     robo_program.drop_spot = action
 
                 robo_program.set_sphere_id(robo_program.sphere_id + 1) # TODO why do we still access sphere IDs?

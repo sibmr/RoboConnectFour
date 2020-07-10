@@ -110,10 +110,7 @@ class Robot(object):
         else:
             align_prio = alignment_priority 
 
-        # TODO decide between np.linalg.norm(y) and np.abs(y).max()
-        print("norm", str(np.linalg.norm(diff)))
-        print("max", str(np.abs(diff).max()))
-        if dist < 0.01: #np.abs(y).max() < 1e-2:
+        if dist < 0.01:
             return True
         
         self.optimization_objective.move_to_position(gripper, obj_pos + pos, align_vec_z=align_vec_z, align_vec_y=align_vec_y, movement_priority=movement_priority, alignment_priority=align_prio)

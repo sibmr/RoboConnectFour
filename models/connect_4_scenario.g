@@ -1,5 +1,5 @@
 Include:'connect_4_6x7_simple.g'
 Include:'connect_4_balls_simple.g'
 Include:'ball_ramp_conv.g'
-Include:'../../robotics-course/scenarios/pandasTable.g'      
+Include:'../scenarios/pandasTable.g'
 Include:'connect_4_fence.g'

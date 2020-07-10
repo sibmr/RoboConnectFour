@@ -27,6 +27,9 @@ class Grid:
                 free.append(i)
         return free
 
+    def equal(self, grid):
+        return np.array_equal(self.grid, grid)
+
     def print(self):
         for row in self.grid.transpose()[::-1]:
             for col_i in row:

@@ -115,7 +115,7 @@ sys.path.append('../')
 from robot import Robot
 from robot_state_machine import RobotConnectFourProgram
 from game import Game
-from strategy import MonteCarloStrategy, MinMaxStrategy, get_asynch_human_strategy
+from strategy import MonteCarloStrategy, MinMaxStrategy, AsyncHumanStrategy
 from perception import Perception
 
 # -------------------------------------------------------------
@@ -129,12 +129,14 @@ last_input = [6] # Human input initialization should be arbitrary existing colum
 human_player = True
 player_won = None
 if human_player:
-    game = Game(MonteCarloStrategy, get_asynch_human_strategy(last_input), selfstate=True)
+    game = Game(MonteCarloStrategy, AsyncHumanStrategy, selfstate=True)
+    human_player = game.player_2
 else:
     game = Game(MonteCarloStrategy, MinMaxStrategy, selfstate=True)
+    human_player = None
 
 timestep = 0
-while last_input[0] != 7: # Human can quit by pressing 0 
+while last_input != 7: # Human can quit by pressing 0
 
     # do perception every 20th timestep - rendering is slow
     if timestep % 20 == 0: # rendering period = 20*timestep = 20*0.015s = 0.3s
@@ -142,12 +144,14 @@ while last_input[0] != 7: # Human can quit by pressing 0
         grid = Perception.detect_grid_state(rgb, depth)
         game.set_grid(grid)
 
-    # look for user input
-    usr_in = cv.waitKey(1)
-    for i in range(0,8): 
-        if  usr_in == ord(str(i)):
-            last_input[0] = 6-(i-1)
-    print("Input: {}".format(last_input))
+    if human_player is not None:
+        # look for user input
+        usr_in = cv.waitKey(1)
+        for i in range(0,8):
+            if  usr_in == ord(str(i)):
+                last_input = 6-(i-1)
+                print("Input set: {}".format(last_input))
+                human_player.user_input = last_input
 
     # give the program new sphere id and drop position if needed
     # put new sphere on table if needed
@@ -156,7 +160,7 @@ while last_input[0] != 7: # Human can quit by pressing 0
     if robo_program.need_new_sphere:
         # step the ai - wait for input on the humans turn
         # ------------------------
-        if game.player == game.player_2 and human_player and waiting_for_input > 0:
+        if game.player == game.player_2 and human_player is not None and waiting_for_input > 0:
             waiting_for_input -= 1
         
         if waiting_for_input == 0 or game.player == game.player_1:
@@ -178,7 +182,7 @@ while last_input[0] != 7: # Human can quit by pressing 0
                 robo_program.need_new_sphere = False
                 
                 # reset waiting counter if there is a human player
-                if human_player: waiting_for_input = 150
+                if human_player is not None: waiting_for_input = 150
 
                 # after next S.set state this teleports a sphere
                 if game.player == game.player_1:
@@ -201,7 +205,7 @@ while last_input[0] != 7: # Human can quit by pressing 0
     # keep setting drop pos to current user input
     # perception is needed for this
     if game.player == game.player_1 and human_player:
-        robo_program.drop_spot = last_input[0]
+        robo_program.drop_spot = last_input
     
     # do state update
     robo_program.step()

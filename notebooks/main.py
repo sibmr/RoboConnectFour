@@ -126,8 +126,8 @@ robo_program = RobotConnectFourProgram(robo)
 # variables for handling game state and asynchronous user input
 waiting_for_input = 0
 last_input = [6] # Human input initialization should be arbitrary existing column (0-6)
-#human_player = True
-human_player = input("Is there a human player (y/n)") == "y"
+human_player = True
+#human_player = input("Is there a human player (y/n)") == "y"
 player_won = None
 if human_player:
     game = Game(MonteCarloStrategy, AsyncHumanStrategy, selfstate=True)
@@ -161,7 +161,7 @@ while last_input != 7: # Human can quit by pressing 0
     if robo_program.need_new_sphere:
         # step the ai - wait for input on the humans turn
         # ------------------------
-        if game.player == game.player_2 and human_player is not None and waiting_for_input > 0:
+        if waiting_for_input > 0:
             waiting_for_input -= 1
         
         if waiting_for_input == 0 or game.player == game.player_1:
@@ -173,7 +173,7 @@ while last_input != 7: # Human can quit by pressing 0
                 if action is None:
                     # Game is finished
                     # The Player from the previous turn is the winner
-                    player_won = game.player_1 if game.player.player == game.player_2 else game.player_2
+                    player_won = game.player.player
                     robo_program.game_won(player_won)
                 else:
                     # Not finished, next turn
@@ -184,7 +184,8 @@ while last_input != 7: # Human can quit by pressing 0
                 robo_program.need_new_sphere = False
                 
                 # reset waiting counter if there is a human player
-                if human_player is not None: waiting_for_input = 150
+                if human_player is not None: waiting_for_input = 100
+                if human_player is None: waiting_for_input = 25
 
                 # after next S.set state this teleports a sphere
                 if game.player == game.player_1:

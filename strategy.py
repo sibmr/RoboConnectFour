@@ -33,7 +33,7 @@ class RandomStrategy(Strategy):
 
 
 class HumanStrategy(Strategy):
-
+    user_input = 6
     def insert(self):
         column = None
         columns_free = self.grid.free_columns()

@@ -126,7 +126,8 @@ robo_program = RobotConnectFourProgram(robo)
 # variables for handling game state and asynchronous user input
 waiting_for_input = 0
 last_input = [6] # Human input initialization should be arbitrary existing column (0-6)
-human_player = True
+#human_player = True
+human_player = input("Is there a human player (y/n)") == "y"
 player_won = None
 if human_player:
     game = Game(MonteCarloStrategy, AsyncHumanStrategy, selfstate=True)
@@ -144,14 +145,14 @@ while last_input != 7: # Human can quit by pressing 0
         grid = Perception.detect_grid_state(rgb, depth)
         game.set_grid(grid)
 
-    if human_player is not None:
-        # look for user input
-        usr_in = cv.waitKey(1)
-        for i in range(0,8):
-            if  usr_in == ord(str(i)):
-                last_input = 6-(i-1)
-                print("Input set: {}".format(last_input))
-                human_player.user_input = last_input
+    #if human_player is not None:
+    # look for user input
+    usr_in = cv.waitKey(1)
+    for i in range(0,8):
+        if  usr_in == ord(str(i)):
+            last_input = 6-(i-1)
+            print("Input set: {}".format(last_input))
+            human_player.user_input = last_input
 
     # give the program new sphere id and drop position if needed
     # put new sphere on table if needed
@@ -171,7 +172,8 @@ while last_input != 7: # Human can quit by pressing 0
                 action = game.step()
                 if action is None:
                     # Game is finished
-                    player_won = game.player.player
+                    # The Player from the previous turn is the winner
+                    player_won = game.player_1 if game.player.player == game.player_2 else game.player_2
                     robo_program.game_won(player_won)
                 else:
                     # Not finished, next turn
@@ -194,7 +196,7 @@ while last_input != 7: # Human can quit by pressing 0
     
     # whacky color changes
     if player_won is not None:
-        if timestep % 2 == 0:
+        if timestep % 8 > 3:
             if player_won == game.player_1:
                 set_fence_color([1,0,0], corners=True)
             else:

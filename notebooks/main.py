@@ -126,7 +126,7 @@ robo_program = RobotConnectFourProgram(robo)
 # variables for handling game state and asynchronous user input
 waiting_for_input = 0
 last_input = [6] # Human input initialization should be arbitrary existing column (0-6)
-human_player = True
+human_player = False
 #human_player = input("Is there a human player (y/n)") == "y"
 player_won = None
 if human_player:
@@ -173,7 +173,7 @@ while last_input != 7: # Human can quit by pressing 0
                 if action is None:
                     # Game is finished
                     # The Player from the previous turn is the winner
-                    player_won = game.player.player
+                    player_won = game.player_2 if game.player.player==game.player_1 else game.player_1
                     robo_program.game_won(player_won)
                 else:
                     # Not finished, next turn

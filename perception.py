@@ -106,8 +106,8 @@ class Perception(object):
                 cv.imshow('OPENCV - red', img_seg_red)
             if len(img_seg_blue)>0:
                 cv.imshow('OPENCV - blue', img_seg_blue)
-        center_lst_seg_red = strategy(img_seg_red)
-        center_lst_seg_blue = strategy(img_seg_blue)
+        center_lst_seg_red = strategy(img_seg_red, display=False)
+        center_lst_seg_blue = strategy(img_seg_blue, display=False)
         return center_lst_seg_red, center_lst_seg_blue
 
     @staticmethod
@@ -121,20 +121,31 @@ class Perception(object):
         return imgray
 
     @staticmethod
-    def erode(imgray, iterations=5, display=False):
-        #imgray = cv.GaussianBlur(imgray, (3,3), 1, 1)
-        kernel = np.ones((3,3),np.uint8)
-        imgray = cv.erode(imgray,kernel,iterations=iterations)
+    def erode(imgray, iterations=3, display=False):
+        kernel_erode = np.ones((3,3),np.uint8)
+        kernel_open = np.ones((3,9),np.uint8)
+
+        for i in range(3):
+            imgray = cv.erode(imgray, kernel_erode, iterations=1)
+            imgray = cv.morphologyEx(imgray, cv.MORPH_OPEN, kernel_open)
+            imgray = cv.morphologyEx(imgray, cv.MORPH_OPEN, kernel_open)
+
         contours, hierarchy = cv.findContours(imgray,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
         if display:
             imgray_disp = imgray.copy()
             if len(imgray_disp)>0:
-                imgray_disp = cv.drawContours(imgray_disp, contours, -1, color=(0,255,0))
+                #imgray_disp = cv.drawContours(imgray_disp, contours, -1, color=(0,255,0))
                 cv.imshow('OPENCV - erode', imgray_disp)
         center_lst = []
         for contour in contours:
             M = cv.moments(contour)
-            center_lst.append([M["m10"] / M["m00"], M["m01"] / M["m00"], 10])
+            try:
+                center_lst.append([M["m10"] / M["m00"], M["m01"] / M["m00"], 10])
+            except ZeroDivisionError:
+                # Contour is only one point, use that point
+                contour_x_y = contour[0][0]
+                center_lst.append([contour_x_y[0], contour_x_y[1], 10])
+
         return center_lst
 
     @staticmethod

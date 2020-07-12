@@ -54,7 +54,7 @@ class Perception(object):
             if len(rgb)>0:
                 Perception.draw_circles(rgb_grid, center_lst_red, color=(255,0,0))
                 Perception.draw_circles(rgb_grid, center_blue_lst, color= (0,0,255))
-                cv.imshow('OPENCV - rgb_grid', cv.cvtColor(rgb_grid, cv.COLOR_RGB2BGR))
+                cv.imshow('7-- OPENCV - rgb_grid --1', cv.cvtColor(rgb_grid, cv.COLOR_RGB2BGR))
 
         return grid
 

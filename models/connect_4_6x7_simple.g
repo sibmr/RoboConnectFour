@@ -2,8 +2,8 @@ frame world 	{  }
 frame connect4(world)   {}
 
 # front / back
-frame connect4_coll7(connect4) 		{  shape:mesh  color:[ 0.9 0.9 0.9 0.3 ]  pose=<T 0 0 0.65 0 0 0 1 > meshscale=0.001 mesh:'meshes/simple_model/Connect4-6X7-simple-7.stl'     contact:-2  logical:{ } friction:.00001  }
-frame connect4_coll3(connect4) 		{  shape:mesh  color:[ 0.9 0.9 0.9 0.3 ]  pose=<T 0 0 0.65 0 0 0 1 > meshscale=0.001 mesh:'meshes/simple_model/Connect4-6X7-simple-3.stl'     contact:-2  logical:{ } friction:.00001  }
+frame connect4_coll7(connect4) 		{  shape:mesh  color:[ 0.9 0.9 0.9 0.3 ]  pose=<T 0  0.005 0.65 0 0 0 1 > meshscale=0.001 mesh:'meshes/simple_model/Connect4-6X7-simple-7.stl'     contact:-2  logical:{ } friction:.00001  }
+frame connect4_coll3(connect4) 		{  shape:mesh  color:[ 0.9 0.9 0.9 0.3 ]  pose=<T 0 -0.005 0.65 0 0 0 1 > meshscale=0.001 mesh:'meshes/simple_model/Connect4-6X7-simple-3.stl'     contact:-2  logical:{ } friction:.00001  }
 
 # sides
 frame connect4_coll4(connect4) 		{  shape:mesh  color:[ 0.9 0.9 0.9 1 ]    pose=<T 0 0 0.65 0 0 0 1 > meshscale=0.001 mesh:'meshes/simple_model/Connect4-6X7-simple-4.stl'     contact:-2  logical:{ } friction:.00001  }

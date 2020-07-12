@@ -118,9 +118,9 @@ class RobotConnectFourProgram(RobotStateMachine):
         self.doing_handover = False
         self.arm_won = None
     
-    def game_won(self, winning_player):
+    def game_won(self, winning_player, player1):
         self.RSTATE = RobotState.goto_winning_pose
-        self.arm_won = "R_gripper" if winning_player == 1 else "L_gripper"
+        self.arm_won = "R_gripper" if winning_player == player1 else "L_gripper"
 
     def set_sphere_id(self, sphere_id, mode=1):
         self.sphere_id = sphere_id

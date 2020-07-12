@@ -130,10 +130,10 @@ human_player = False
 #human_player = input("Is there a human player (y/n)") == "y"
 player_won = None
 if human_player:
-    game = Game(MonteCarloStrategy, AsyncHumanStrategy, selfstate=True)
+    game = Game(MonteCarloStrategy, AsyncHumanStrategy, selfstate=False)
     human_player = game.player_2
 else:
-    game = Game(MonteCarloStrategy, MinMaxStrategy, selfstate=True)
+    game = Game(MonteCarloStrategy, MinMaxStrategy, selfstate=False)
     human_player = None
 
 timestep = 0
@@ -173,8 +173,8 @@ while last_input != 7: # Human can quit by pressing 0
                 if action is None:
                     # Game is finished
                     # The Player from the previous turn is the winner
-                    player_won = game.player_2 if game.player.player==game.player_1 else game.player_1
-                    robo_program.game_won(player_won)
+                    player_won = game.player_2.player if game.player.player==game.player_1.player else game.player_1.player
+                    robo_program.game_won(player_won, game.player_1.player)
                 else:
                     # Not finished, next turn
                     robo_program.drop_spot = action
@@ -198,7 +198,7 @@ while last_input != 7: # Human can quit by pressing 0
     # whacky color changes
     if player_won is not None:
         if timestep % 8 > 3:
-            if player_won == game.player_1:
+            if player_won == game.player_1.player:
                 set_fence_color([1,0,0], corners=True)
             else:
                 set_fence_color([0,0,1], corners=True)

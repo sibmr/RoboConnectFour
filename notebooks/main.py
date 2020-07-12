@@ -188,11 +188,12 @@ while last_input != 7: # Human can quit by pressing 0
                 if human_player is None: waiting_for_input = 25
 
                 # after next S.set state this teleports a sphere
-                if game.player == game.player_1:
-                    sim_spheres[robo_program.sphere_id+22].setPosition([1.2,0,0.8])
-                else:
-                    sim_spheres[robo_program.sphere_id+22].setPosition([-1.2,0,0.8])
-                S.setState(RealWorld.getFrameState())
+                if player_won is None:  # fix red sphere bug when winning
+                    if game.player == game.player_1:
+                        sim_spheres[robo_program.sphere_id+22].setPosition([1.2,0,0.8])
+                    else:
+                        sim_spheres[robo_program.sphere_id+22].setPosition([-1.2,0,0.8])
+                    S.setState(RealWorld.getFrameState())
             # ------------------------
     
     # whacky color changes

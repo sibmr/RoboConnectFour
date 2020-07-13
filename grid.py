@@ -4,6 +4,7 @@ import numpy as np
 class Grid:
 
     def __init__(self):
+        # Setup internal grid state
         self.kGridWidth = 7
         self.kGridHeight = 6
         self.grid = np.zeros((self.kGridWidth, self.kGridHeight), dtype=np.uint8)
@@ -11,6 +12,7 @@ class Grid:
         self.log = []
 
     def insert(self, column: int, player: int):
+        # Insert item into defined column
         assert(column >= 0), "Negative column not allowed"
         assert(column < self.kGridWidth), "Column number greater than grid size"
         assert(self.grid[column][-1] == 0), "Column already full"
@@ -21,6 +23,7 @@ class Grid:
         self.counter += 1
 
     def free_columns(self):
+        # Return list of columns with remaining slots
         free = []
         for i, col in enumerate(self.grid):
             if col[-1] == 0:
@@ -31,6 +34,7 @@ class Grid:
         return np.array_equal(self.grid, grid)
 
     def print(self):
+        # Method to print grid state to console
         for row in self.grid.transpose()[::-1]:
             for col_i in row:
                 if col_i != 0:
@@ -40,6 +44,7 @@ class Grid:
             print('|\n', *['-']*(self.kGridWidth*4+1), sep='')
     
     def won(self):
+        # Check if game is won and return winning player
         for i in range(0, self.kGridWidth):
             for j in range(0, self.kGridHeight):
                 try:
@@ -50,6 +55,7 @@ class Grid:
                     return player_won
 
     def check_cell(self, col: int, row: int):
+        # Check if given cell is part of a winning connect 4 row
         player = self.grid[col][row]
         assert(player != 0), "Cell not filled yet"
         
@@ -119,6 +125,7 @@ class Grid:
 
 
 if __name__ == "__main__":
+    # Some setup to test the code
     g = Grid()
 
     for i in range(0,4):

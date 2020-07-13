@@ -2,6 +2,11 @@ import cv2 as cv
 import numpy as np
 
 class Perception(object):
+"""
+    This class is a perception toolbox to extract the connect 4 game state.
+    All methods are static and the class has no members.
+    Therefore, the class works as library for convenient usage.
+"""
 
     @staticmethod
     def get_object_pixels(depth, depth_background):
@@ -35,16 +40,17 @@ class Perception(object):
 
     @staticmethod
     def detect_grid_state(rgb, depth, display=True):
-        #rgb = cv.rotate(rgb, rotateCode=cv.ROTATE_180)
+        # Flip image to match perspective of robot arms
         rgb = cv.flip(rgb, flipCode=1)
-        #depth = cv.rotate(depth, cv.ROTATE_180)
+        # Gaussian Blur to increase robustness of algorithms
         rgb = cv.GaussianBlur(rgb, (5,5), 1, 1)
-
+        # Find region of interest for grid
         x,y,w,h = Perception.extract_roi(depth)
         rgb_grid = np.zeros(rgb.shape, dtype=np.uint8)
         rgb_grid[y:y+h,x:x+w] = rgb[y:y+h,x:x+w]
-
+        # Extract circular objects
         center_lst_red, center_blue_lst = Perception.extract_circles(rgb_grid, strategy=Perception.erode)
+        # Infer grid state from circle centers
         grid = Perception.get_grid_state_from_centers(center_lst_red, center_blue_lst, x, y, w, h)
 
         if display:
@@ -60,6 +66,7 @@ class Perception(object):
 
     @staticmethod
     def calc_cell_from_pixel(center, x, y, w, h, grid_width, grid_height):
+        # Helper method to calculate grid cell from pixel position
         grid_x = ((center[0] - w*0.05 - x) / (w*0.9) - 1.0/grid_width/2.0) * grid_width
         grid_x = int(np.round(grid_x))
         grid_y = ((center[1] - h*0.24 - y) / (h * 0.73) - 1.0/grid_height/2.0) * grid_height
@@ -68,6 +75,7 @@ class Perception(object):
 
     @staticmethod
     def get_grid_state_from_centers(center_red_lst, center_blue_lst, x, y, w, h):
+        # Transform pixel coordinates into grid cell occupancy
         grid_width = 7
         grid_height = 6
         grid = np.zeros((grid_width, grid_height), dtype=np.uint8)
@@ -88,10 +96,12 @@ class Perception(object):
 
     @staticmethod
     def extract_roi(depth):
+        # Find region of interest in image center based on depth information
         dim = depth.shape
         depth_grid = depth[round(dim[0]/2), round(dim[1]/2)]
         diff_bool = (np.abs(depth-depth_grid) < 1e-7)
         diff_gray = diff_bool.astype(np.uint8) * 255
+        # Fit a rectangle around the largest contour
         contours, hierarchy = cv.findContours(diff_gray, cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
         contour = max(contours, key = cv.contourArea)
         x,y,w,h = cv.boundingRect(contour)
@@ -99,6 +109,7 @@ class Perception(object):
 
     @staticmethod
     def extract_circles(img, strategy, display=False):
+        # Return blue and red circular objects from image
         img_seg_red = Perception.segment_color(img, [255,0,0])
         img_seg_blue = Perception.segment_color(img, [0,0,255])
         if display:
@@ -112,6 +123,7 @@ class Perception(object):
 
     @staticmethod
     def segment_color(rgb, mask_rgb):
+        # Segment image by color
         hsv = cv.cvtColor(rgb, cv.COLOR_RGB2HSV)
         mask_hsv = cv.cvtColor(np.uint8([[mask_rgb]]), cv.COLOR_RGB2HSV)[0,0]
         diff = np.array([30, 100, 100])
@@ -122,6 +134,7 @@ class Perception(object):
 
     @staticmethod
     def erode(imgray, iterations=3, display=False):
+        # Combine morphological operations to reduce segmented image to separate clusters
         kernel_erode = np.ones((3,3),np.uint8)
         kernel_open = np.ones((3,9),np.uint8)
 
@@ -134,7 +147,6 @@ class Perception(object):
         if display:
             imgray_disp = imgray.copy()
             if len(imgray_disp)>0:
-                #imgray_disp = cv.drawContours(imgray_disp, contours, -1, color=(0,255,0))
                 cv.imshow('OPENCV - erode', imgray_disp)
         center_lst = []
         for contour in contours:
@@ -150,6 +162,7 @@ class Perception(object):
 
     @staticmethod
     def hough(imgray):
+        # Use circle hough transformation to detect circular objects
         circles = cv.HoughCircles(imgray,cv.HOUGH_GRADIENT,1,18,
                             param1=150,param2=10,minRadius=8,maxRadius=15)
         center_lst = []
@@ -159,6 +172,7 @@ class Perception(object):
 
     @staticmethod
     def draw_circles(img, circle_lst, color=(0,255,0)):
+        # Draw list of circles onto image
         for i in circle_lst:
             cv.circle(img,(int(i[0]),int(i[1])),int(i[2]),color,2)
     

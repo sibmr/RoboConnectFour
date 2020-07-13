@@ -8,19 +8,28 @@ from game import Game
 
 
 class Strategy:
+"""
+    Strategy class serves as base class for all connect 4 agents.
+    The agents inherit from Strategy and share a common interface.
+"""
 
     def __init__(self, player, grid: Grid, selfstate=False):
+        # Setup internal strategy state
         self.player = player
         self.grid = grid
         self.selfstate = selfstate
 
     def insert(self, column):
-        # TODO remove insert method, no ground truth game state
+        # Interface method overriden by all child classes
+        # Insert method only updates state if internal game state is wished
         if self.selfstate:
             self.grid.insert(column, self.player)
 
 
 class RandomStrategy(Strategy):
+"""
+    RandomStrategy selects a column randomly.
+"""
 
     def insert(self):
         column = None
@@ -33,7 +42,10 @@ class RandomStrategy(Strategy):
 
 
 class HumanStrategy(Strategy):
-    user_input = 6
+"""
+    HumanStrategy is an early implementation of a human interface.
+"""
+
     def insert(self):
         column = None
         columns_free = self.grid.free_columns()
@@ -53,6 +65,10 @@ class HumanStrategy(Strategy):
         return column
 
 class AsyncHumanStrategy(Strategy):
+"""
+    AsyncHumanStrategy is an advanced implementation of a human interface.
+    It uses asynchronous keyboard input to avoid blocking the simulation loop.
+"""
 
     def insert(self):
         column = None
@@ -74,6 +90,11 @@ class AsyncHumanStrategy(Strategy):
 
 
 class MonteCarloStrategy(Strategy):
+"""
+    MonteCarloStrategy is a method based on random sampling.
+    All options are played iteratively in a random fashion until a defined time limit is reached.
+    The option with the highest win ratio is returned.
+"""
 
     def insert(self):
         computation_time = 1.0
@@ -122,8 +143,14 @@ class MonteCarloStrategy(Strategy):
 
 
 class MinMaxStrategy(Strategy):
+"""
+    MinMaxStrategy is a method based on depth-first search.
+    The algorithm plays all combinations up to a defined depth.
+    It chooses the option that minimizes the opponent's reward while maximizing the own reward.
+"""
 
     def min_max(self, grid, depth, player, is_maximizing):
+        # Helper function to execute min-max algorithm
         if player == 1:
             other_player = 2
         else:

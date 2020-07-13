@@ -4,9 +4,9 @@ from grid import Grid
 
 
 class Game:
-"""
+    """
     This class handles the game state and the player strategies.
-"""
+    """
 
     def __init__(self, strategy_1, strategy_2, grid=None, selfstate=False):
         # Setup internal game state

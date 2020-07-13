@@ -2,11 +2,11 @@ import cv2 as cv
 import numpy as np
 
 class Perception(object):
-"""
+    """
     This class is a perception toolbox to extract the connect 4 game state.
     All methods are static and the class has no members.
     Therefore, the class works as library for convenient usage.
-"""
+    """
 
     @staticmethod
     def get_object_pixels(depth, depth_background):

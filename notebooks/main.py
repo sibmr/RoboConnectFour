@@ -29,6 +29,8 @@ RealWorld = ry.Config()
 #RealWorld.addFile(connect_4_sphere_file)
 #RealWorld.addFile(ball_ramp_file)
 RealWorld.addFile(scene_file_sim)
+#RealWorld.addFile('../models/connect_4_balls_demo_1.g')
+#RealWorld.addFile('../models/connect_4_balls_demo_2.g')
 V = ry.ConfigurationViewer()
 V.setConfiguration(RealWorld)
 
@@ -125,13 +127,14 @@ robo_program = RobotConnectFourProgram(robo)
 
 # variables for handling game state and asynchronous user input
 waiting_for_input = 0
-last_input = [6] # Human input initialization should be arbitrary existing column (0-6)
+last_input = 6 # Human input initialization should be arbitrary existing column (0-6)
 human_player = False
 #human_player = input("Is there a human player (y/n)") == "y"
 player_won = None
 if human_player:
-    game = Game(MonteCarloStrategy, AsyncHumanStrategy, selfstate=False)
+    game = Game(MinMaxStrategy, AsyncHumanStrategy, selfstate=False)
     human_player = game.player_2
+    human_player.user_input = last_input
 else:
     game = Game(MonteCarloStrategy, MinMaxStrategy, selfstate=False)
     human_player = None
@@ -152,7 +155,7 @@ while last_input != 7: # Human can quit by pressing 0
         if  usr_in == ord(str(i)):
             last_input = 6-(i-1)
             print("Input set: {}".format(last_input))
-            human_player.user_input = last_input
+            if human_player is not None: human_player.user_input = last_input
 
     # give the program new sphere id and drop position if needed
     # put new sphere on table if needed

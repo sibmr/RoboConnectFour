@@ -9,6 +9,8 @@ https://github.com/MarcToussaint/robotics-course
 
 Installation Instructions:   
 https://docs.google.com/document/d/1PmcQ5rzHR3YHr_XSKgP176tMr-1xGdzEG3-Fns3_kpw/edit
+Please clone this repository into the same directory where the robotics-course repository is located.
+This way, the relative imports work across the repositories.
 
 ## Starting the Program
 

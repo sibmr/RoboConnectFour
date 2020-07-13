@@ -4,8 +4,12 @@ from grid import Grid
 
 
 class Game:
+"""
+    This class handles the game state and the player strategies.
+"""
 
     def __init__(self, strategy_1, strategy_2, grid=None, selfstate=False):
+        # Setup internal game state
         if grid is None:
             grid = Grid()
         self.grid = grid
@@ -17,12 +21,14 @@ class Game:
         self.player = self.player_1
 
     def turn(self):
+        # Change player
         if self.player == self.player_1:
             self.player = self.player_2
         else:
             self.player = self.player_1
 
     def set_grid(self, grid):
+        # Used from perception to update grid state
         if not self.selfstate:
             if not self.grid.equal(grid):
                 self.grid_has_changed = True
@@ -34,12 +40,14 @@ class Game:
             print("Warning: Set grid but selfstate is True... Skip")
 
     def play(self):
+        # Start full game
         column = 0
         while column is not None:
             column = self.step()
         self.grid.print()
 
     def step(self):
+        # Execute next move and turn
         self.next_move = self.selfstate
         self.grid.print()
         print("Player " + str(self.player.player) + "'s Turn: ", end='')

@@ -1,3 +1,6 @@
+# Taken from https://github.com/MarcToussaint/robotics-course
+# Camera configuration was modified from the original file
+
 world {}
 
 table (world){

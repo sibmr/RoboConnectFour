@@ -1,3 +1,5 @@
+# Taken from https://github.com/MarcToussaint/robotics-course
+
 Include: '../models/panda/panda_clean.g'
 
 ## simplerCollisionModels.g

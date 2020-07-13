@@ -116,7 +116,7 @@ human_player = False
 human_player = input("Is there a human player (y/n)") == "y"
 player_won = None
 if human_player:
-    game = Game(MinMaxStrategy, AsyncHumanStrategy, selfstate=False)
+    game = Game(MonteCarloStrategy, AsyncHumanStrategy, selfstate=False)
     human_player = game.player_2
     human_player.user_input = last_input
 else:

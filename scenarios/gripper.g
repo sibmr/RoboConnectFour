@@ -1,3 +1,5 @@
+# Taken from https://github.com/MarcToussaint/robotics-course
+
 gripper{
     shape:ssBox, size:[.14 .04 .03 .01], color:[.9 .9 .9]
     X:<t(.05 .5 1.) d(-90 0 0 1) d(-45 1 0 0) >

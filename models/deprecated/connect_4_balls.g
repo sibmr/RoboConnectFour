@@ -1,0 +1,25 @@
+## spheres as game objects
+sphere1       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[0.01   , -0.1, 0.7,    0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere2       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[0.02   , -0.1, 0.7,    0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere3       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[-0.01  , -0.1, 0.7,    0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere4       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[-0.02  , -0.1, 0.7,    0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere5       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[5      , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere6       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[6      , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere7       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[7      , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere8       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[8      , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere9       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[9      , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere10       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[10     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere11       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[11     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere12       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[12     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere13       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[13     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere14       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[14     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere15       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[15     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere16       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[16     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere17       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[17     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere18       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[18     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere19       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[19     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere20       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[20     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere21       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[21     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere22       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[22     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere23       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[23     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}
+sphere24       		{  shape:sphere, size:[0.022],, mass:0.2 X:<[24     , 0,    0,      0, 0, 0, 1]> color:[ 1 0 0 1 ]}

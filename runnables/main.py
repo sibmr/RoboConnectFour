@@ -9,11 +9,7 @@ import libry as ry
 import time
 print(cv.__version__)
 
-connect_4_model_file = "../models/connect_4_6x7_simple.g"
-connect_4_sphere_file = "../models/connect_4_balls_simple.g"
-ball_ramp_file = "../models/ball_ramp_conv.g"
-pandas_model_file = '../scenarios/pandasTable.g'
-ghost_sphere_file = '../models/connect_4_ghost_sphere.g'
+
 scene_file_sim = '../models/connect_4_scenario_mirror_sim.g'
 scene_file_conf = '../models/connect_4_scenario_mirror_conf.g'
 # In[2]
@@ -24,10 +20,6 @@ scene_file_conf = '../models/connect_4_scenario_mirror_conf.g'
 
 #Let's edit the real world before we create the simulation
 RealWorld = ry.Config()
-#RealWorld.addFile(pandas_model_file)
-#RealWorld.addFile(connect_4_model_file)
-#RealWorld.addFile(connect_4_sphere_file)
-#RealWorld.addFile(ball_ramp_file)
 RealWorld.addFile(scene_file_sim)
 #RealWorld.addFile('../models/connect_4_balls_demo_1.g')
 #RealWorld.addFile('../models/connect_4_balls_demo_2.g')
@@ -51,8 +43,6 @@ for i in range(1,67):
     sphere.setContact(1)
     sim_spheres.append(sphere)
 
-#for i in range(1,6):
-#    RealWorld.getFrame("ball_ramp{}".format(i)).setContact(1)
 
 V.recopyMeshes(RealWorld)
 V.setConfiguration(RealWorld)
@@ -75,11 +65,8 @@ S.addSensor("camera")
 
 # create your model world
 C = ry.Config()
-#C.addFile(pandas_model_file)
-#C.addFile(connect_4_model_file)
-#C.addFile(ball_ramp_file)
 C.addFile(scene_file_conf)
-#V = ry.ConfigurationViewer()
+
 V.setConfiguration(C)
 cameraFrame = C.frame("camera")
 
@@ -92,9 +79,6 @@ cameraFrame = C.frame("camera")
 
 for i in range(1,11):
     C.getFrame("connect4_coll{}".format(i)).setContact(1)
-
-#for i in range(1,6):
-#    C.getFrame("ball_ramp{}".format(i)).setContact(1)
 
 V.setConfiguration(C)
 
@@ -129,7 +113,7 @@ robo_program = RobotConnectFourProgram(robo)
 waiting_for_input = 0
 last_input = 6 # Human input initialization should be arbitrary existing column (0-6)
 human_player = False
-#human_player = input("Is there a human player (y/n)") == "y"
+human_player = input("Is there a human player (y/n)") == "y"
 player_won = None
 if human_player:
     game = Game(MinMaxStrategy, AsyncHumanStrategy, selfstate=False)

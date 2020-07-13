@@ -39,17 +39,15 @@ class OptimizationObjective(object):
         """
         ry = self.ry
         self.komo.addObjective([1.], ry.FS.positionDiff, [gripper+"Center",obj], ry.OT.sos, [2e3])
-        #self.komo.addObjective([1.], ry.FS.positionDiff, [gripper, obj], ry.OT.sos, [1e2])
+
         if align_vec_z:
             self.komo.addObjective([1.], ry.FS.vectorZ, [gripper+"Center"], ry.OT.sos, [3e2], target=align_vec_z)
         if align_vec_y:
             self.komo.addObjective([1.], ry.FS.vectorY, [gripper+"Center"], ry.OT.sos, [3e2], target=align_vec_y)
         
-        #self.komo.addObjective([1.], ry.FS.scalarProductXZ, [obj,gripper+"Center"], ry.OT.sos, [1e2])
-        #self.komo.addObjective([1.], ry.FS.scalarProductXY, [obj,gripper+"Center"], ry.OT.sos, [1e2])
         self.komo.addObjective([], ry.FS.accumulatedCollisions, [], ry.OT.ineq, [1e2])
         self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [2e1], order=1)
-        #self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [3e1])
+
         finger1 = "{}_finger1".format(gripper[0])
         finger2 = "{}_finger2".format(gripper[0])
         self.komo.addObjective([], ry.FS.qItself, [finger1], ry.OT.eq, [3e1], order=1)
@@ -77,9 +75,6 @@ class OptimizationObjective(object):
         self.komo.addObjective([1.], ry.FS.position, [gripper + "Center"], ry.OT.sos, [movement_priority], target=pos)
         self.komo.addObjective([0.,.1], ry.FS.qItself, [], ry.OT.sos, [5e3], order=1)
         self.komo.addObjective([.9,1.], ry.FS.qItself, [], ry.OT.sos, [5e1], order=1)
-        #self.komo.addObjective([1.], ry.FS.qItself, [], ry.OT.sos, [3e1]);
-        #self.komo.addObjective([], ry.FS.qItself, ["{}_finger1".format(gripper[0])], ry.OT.eq, [1e2], order=1)
-        #self.komo.addObjective([], ry.FS.qItself, ["{}_finger2".format(gripper[0])]5, ry.OT.eq, [1e2], order=1)
 
         self.komo.addObjective([], ry.FS.qItself, ["R_finger1"], ry.OT.eq, [1e2], order=1)
         self.komo.addObjective([], ry.FS.qItself, ["R_finger2"], ry.OT.eq, [1e2], order=1)
